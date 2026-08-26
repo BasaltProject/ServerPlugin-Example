@@ -1,0 +1,10 @@
+# Coins granted once, the first time someone joins.
+welcome-bonus = 50
+
+# Coins granted to everyone online, every payout-period ticks (20 ticks = 1 second).
+payout-amount = 5
+payout-period = 1200
+
+[shop]
+sparkles-price = 100
+fireworks-price = 150

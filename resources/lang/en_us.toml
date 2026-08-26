@@ -1,0 +1,20 @@
+welcome = "<gold>Welcome, <yellow>{name}</yellow>! Here is <green>{amount}</green> coins to get started."
+welcome-back = "<gray>Welcome back, {name}. Balance: <gold>{amount}</gold> coins."
+payout = "<gray>+{amount} coins for playing. Balance: <gold>{balance}</gold>."
+
+balance-usage = "<red>Usage: /coins [player]"
+balance-self = "<gray>You have <gold>{amount}</gold> coins."
+balance-other = "<gray>{name} has <gold>{amount}</gold> coins."
+
+top-header = "<gold><bold>Top coins</bold>"
+top-row = "<gray>{rank}. {name} <gold>{amount}</gold>"
+top-empty = "<gray>Nobody has any coins yet."
+
+shop-title = "<dark_gray>Coin Shop"
+shop-item-sparkles = "<aqua>Sparkles"
+shop-item-sparkles-lore = "<gray>{price} coins, a burst of particles"
+shop-item-fireworks = "<light_purple>Fireworks"
+shop-item-fireworks-lore = "<gray>{price} coins, one firework at your feet"
+shop-bought = "<green>Bought {item} for {price} coins."
+shop-cant-afford = "<red>You need {price} coins for that; you have {amount}."
+shop-players-only = "<red>The shop needs a player, not the console."

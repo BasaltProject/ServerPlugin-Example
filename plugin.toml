@@ -1,0 +1,10 @@
+id = "example"
+name = "Example"
+version = "1.0.0"
+authors = ["Whiron"]
+api = 1
+main = "src/main.lua"
+
+[capabilities]
+# Needed for `player.data.coins`: a balance per player, in players.db.
+players_data = true
