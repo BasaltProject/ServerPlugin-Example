@@ -9,7 +9,7 @@
 </p>
 
 <p align="center">
-  <img alt="Minecraft" src="https://img.shields.io/badge/Minecraft-26.2-62B47A?logo=minecraft&logoColor=white">
+  <img alt="Minecraft" src="https://img.shields.io/badge/Minecraft-26.3-62B47A?logo=minecraft&logoColor=white">
   <img alt="Lua" src="https://img.shields.io/badge/Lua-5.5-000080?logo=lua&logoColor=white">
   <img alt="Plugin API" src="https://img.shields.io/badge/plugin_api-1-000080">
   <img alt="License" src="https://img.shields.io/badge/license-GPL--3.0-green">
