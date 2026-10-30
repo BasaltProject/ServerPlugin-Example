@@ -30,6 +30,8 @@ whatever it looked like when it was written.
 The plugin itself is a greeter that pays coins for playing, a leaderboard, and
 a shop to spend them in.
 
+Bukkit, Spigot and Paper jars are a separate path and are not covered here.
+
 It is a `.bspkg` package in source form: `plugin.toml` at the root, code under
 `src/`, everything else under `resources/`. Dropped into a server's `plugins/`
 folder as a loose directory it loads exactly as it would packed, which is the
@@ -72,7 +74,7 @@ Then, in game:
 - `/shop` opens a menu with two items; buying one takes the coins and plays a
   particle effect or a sound.
 
-Coins keep trickling in every minute (`payout-period` in `config.toml`) for
+Coins keep trickling in every minute (`payout-period` in `config.toml`, 1200 ticks) for
 whoever is online.
 
 ## License
