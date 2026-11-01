@@ -56,6 +56,13 @@ plugin on its own; splitting this one into `coins.lua`, `shop.lua`,
 `events.lua` and `commands.lua` is just what makes a plugin this size easier
 to read.
 
+## Checking and packing
+
+The `Check` workflow downloads the latest [Kiln](https://github.com/BasaltProject/Kiln/releases), runs `kiln check` on
+the plugin and packs it with `kiln pack`, on every push and pull request. The package is attached to the run. Fork
+this repository for your own plugin and the same checks run on it with no setup. To run them yourself, install Kiln and
+use `kiln check .` and `kiln pack .`.
+
 ## Trying it out
 
 Copy this repository's contents into `plugins/example/` of a Basalt Server

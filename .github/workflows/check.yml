@@ -1,0 +1,39 @@
+name: Check
+
+on:
+  push:
+    branches: [main]
+    paths-ignore: ['**.md']
+  pull_request:
+    paths-ignore: ['**.md']
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Kiln
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          mkdir -p "$HOME/.local/bin" /tmp/kiln
+          gh release download -R BasaltProject/Kiln -D /tmp/kiln -p 'Kiln-*-Linux-x64' -p SHA256SUMS
+          (cd /tmp/kiln && sha256sum --check --ignore-missing SHA256SUMS)
+          install -m 755 /tmp/kiln/Kiln-*-Linux-x64 "$HOME/.local/bin/kiln"
+          echo "$HOME/.local/bin" >>"$GITHUB_PATH"
+
+      - name: Check the plugin
+        run: kiln check .
+
+      - name: Pack the plugin
+        run: kiln pack .
+
+      - name: Upload the package
+        uses: actions/upload-artifact@v4
+        with:
+          name: plugin
+          path: build/*.bspkg
