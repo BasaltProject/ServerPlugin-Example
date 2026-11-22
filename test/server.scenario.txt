@@ -1,0 +1,26 @@
+# Server area: permissions, providers, broadcast, info, admin calls, files, storage, services, commands, scheduler
+enable
+join Steve
+join Alex
+command Steve srv perms
+ask Steve example.vip
+askmeta Steve prefix
+ask console example.vip
+command Steve srv broadcast
+command Steve srv info
+command Steve srv admin
+command Steve srv files
+command Steve srv store
+command Steve srv service
+tick 1
+command Steve srv later
+tick 20
+command Steve srv manage
+command Steve dyn 1.5 true
+command Steve dy
+complete Steve dyn al
+complete Steve dyn
+command Steve srv unmanage
+command Steve dyn
+leave Alex
+command console srv broadcast

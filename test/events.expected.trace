@@ -1,0 +1,260 @@
+# enable
+init
+host translate("shop-title", {}, cap=256) = 20 "<dark_gray>Coin Shop"
+host menu_create("<dark_gray>Coin Shop", 3) = 1
+host config_i64("shop.sparkles-price", 100) = 100
+host translate("shop-item-sparkles", {}, cap=256) = 14 "<aqua>Sparkles"
+host translate("shop-item-sparkles-lore", {price="100"}, cap=256) = 37 "<gray>100 coins, a burst of particles"
+host menu_set(1, 11, "minecraft:blaze_powder", "<aqua>Sparkles", "<gray>100 coins, a burst of particles", 1) = 0
+host config_i64("shop.fireworks-price", 150) = 150
+host translate("shop-item-fireworks", {}, cap=256) = 23 "<light_purple>Fireworks"
+host translate("shop-item-fireworks-lore", {price="150"}, cap=256) = 42 "<gray>150 coins, one firework at your feet"
+host menu_set(1, 15, "minecraft:firework_rocket", "<light_purple>Fireworks", "<gray>150 coins, one firework at your feet", 2) = 0
+host event_on("player.join", 2, 3) = 0
+host config_i64("payout-period", 1200) = 1200
+host task_every(1200, 1200, 4) = 1
+host placeholder_register("coins", 5) = 0
+host command_register("coins [target: word]", "", 6) = 0
+host command_register("coins top [limit: int 1..25]", "", 7) = 0
+host command_register("shop", "example.shop", 8) = 0
+host event_on_ex("player.chat", 2, 0, none, 9) = 0
+host event_on_ex("player.chat", 4, 3, none, 10) = 0
+host event_on_ex("player.join", 1, 0, {"world": "world"}, 11) = 0
+host event_on_ex("example:ping", 2, 0, none, 12) = 0
+host event_on_ex("no.such.event", 2, 0, none, 13) = -3
+host permission_provide(10, 3, 14) = 1
+host service_register("example.echo", 15) = 1
+host command_register("srv hello", "", 16) = 0
+host command_register("srv perms", "", 17) = 0
+host command_register("srv broadcast", "", 18) = 0
+host command_register("srv info", "", 19) = 0
+host command_register("srv admin", "", 20) = 0
+host command_register("srv files", "", 21) = 0
+host command_register("srv store", "", 22) = 0
+host command_register("srv service", "", 23) = 0
+host command_register("srv later", "", 24) = 0
+host command_register("srv manage", "", 25) = 0
+host command_register("srv unmanage", "", 26) = 0
+host command_register("worlds", "", 27) = 0
+host command_register("hud board", "", 28) = 0
+host command_register("hud bars", "", 29) = 0
+host command_register("hud holograms", "", 30) = 0
+host command_register("hud npcs", "", 31) = 0
+host command_register("hud npc-end", "", 32) = 0
+host command_register("hud tab", "", 33) = 0
+host command_register("hud surfaces", "", 34) = 0
+host command_register("hud surface-end", "", 35) = 0
+host command_register("items give <id: word> [count: int 1..64]", "", 36) = 0
+host command_register("items take <id: word> [count: int 1..64]", "", 37) = 0
+host command_register("items count <id: word>", "", 38) = 0
+host command_register("items slot <slot: int 0..40>", "", 39) = 0
+host command_register("items hand", "", 40) = 0
+host command_register("items chest", "", 41) = 0
+host command_register("items ender", "", 42) = 0
+host command_register("items cooldown <id: word> <ticks: int 0..1000>", "", 43) = 0
+host command_register("items registry <kind: word> <key: word>", "", 44) = 0
+host command_register("items level <level: int 1..10>", "", 45) = 0
+host command_register("items recipes", "", 46) = 0
+host command_register("items book", "", 47) = 0
+host command_register("items craft", "", 48) = 0
+host command_register("items menu", "", 49) = 0
+host command_register("items closemenu", "", 50) = 0
+host command_register("items window", "", 51) = 0
+host command_register("items merchant", "", 52) = 0
+host command_register("items loot", "", 53) = 0
+host command_register("entities tour", "", 54) = 0
+host command_register("entities bad", "", 55) = 0
+host event_on("plugin.enable", 2, 56) = 0
+host channel_listen("example:chan", 57) = 0
+host packet_listen("serverbound.chat_message", {"priority": "first"}, 58) = 1
+host packet_listen("clientbound.*", {"observe": true}, 59) = 2
+host packet_listen("serverbound.play.*", {"priority": "late", "observe": true}, 60) = 3
+host packet_listen("serverbound.chat_command", null, 61) = 4
+host packet_listen("nope", null, 62) = -3
+host command_register("pkt <action: word>", "", 63) = 0
+callback token=56 ctx=1
+host config_i64("payout-amount", 5) = 5
+host config_i64("payout-period", 1200) = 1200
+host log(1, "ready: 5 coins every 1200 ticks")
+world event plugin.enable listeners=1 cancelled=0
+# join Steve
+world join Steve handle=1
+callback token=3 ctx=2
+host event_player(2) = 1
+host player_name(1, cap=256) = 5 "Steve"
+host data_get_bool(1, "welcomed", 0) = 0
+host data_set_bool(1, "welcomed", 1) = 0
+host config_i64("welcome-bonus", 50) = 50
+host data_get_i64(1, "coins", 0) = 0
+host data_set_i64(1, "coins", 50) = 0
+host player_send(1, "@welcome", {name="Steve", amount="50"}) = 0
+world send Steve "<gold>Welcome, <yellow>Steve</yellow>! Here is <green>50</green> coins to get started."
+world event player.join listeners=1 cancelled=0
+# fire_event player.join player=Steve world=world
+callback token=11 ctx=3
+host event_player(3) = 1
+host event_get(3, "world", cap=512) = 7 "world"
+host event_fields(3, cap=512) = 101 {"player_name": "Steve", "player_uuid": "00000000-0000-0000-0000-000000000001", "world": "world", "message": null, "silent": null}
+host event_describe("player.chat", cap=512) = 208 {"name": "player.chat", "cancellable": true, "custom": false, "fields": [{"name": "player_name", "mutable": false}, {"name": "player_uuid", "mutable": false}, {"name": "world", "mutable": false}, {"name": "message", "mutable": true}, {"name": "format", "mutable": true}, {"name": "recipients", "mutable": true}]}
+host event_describe("no.such.event", cap=512) = -1
+host event_names(cap=8192) = 4174 228 names
+host player_uuid(1, cap=64) = 36 "00000000-0000-0000-0000-000000000001"
+host player_by_uuid("00000000-0000-0000-0000-000000000001") = 1
+host player_by_uuid("00000000-0000-0000-0000-999999999999") = 0
+host player_uuid(9999, cap=64) = -2
+host player_get(1, "food", cap=512) = 2 20
+host player_get(1, "no_such_property", cap=512) = -1
+host player_set(1, "food", 18) = 0
+host player_set(1, "name", 18) = -3
+host player_describe(cap=8192) = 5429 85 properties 122 operations
+world call Steve reset_idle []
+host player_call(1, "reset_idle", [], cap=512) = 1 null
+host player_call(1, "no_such_operation", [], cap=512) = -1
+host player_health(1) = 0 out=20
+host player_set_health(1, 10.5) = 0
+host player_set_health(1, -1) = -3
+host player_gamemode(1, cap=16) = 8 "survival"
+world gamemode Steve creative
+host player_set_gamemode(1, "creative") = 0
+host player_set_gamemode(1, "bogus") = -3
+world teleport Steve world 10.5 64 -3.25
+host player_teleport(1, "", 10.5, 64, -3.25, 90, 15) = 0
+host player_teleport(1, "no_such_world", 0, 64, 0, 0, 0) = -1
+world title Steve "<gold>Welcome" "<gray>enjoy" 10/40/10
+host player_title(1, "<gold>Welcome", "<gray>enjoy", 10, 40, 10, {}) = 0
+host player_title(1, "<gold>Welcome", "", -1, 40, 10, {}) = -3
+world effect Steve minecraft:speed 200 1
+host player_effect(1, "minecraft:speed", 200, 1) = 0
+host player_effect(1, "no_such_effect", 200, 1) = -1
+world window Steve trades
+host player_open_inventory(1, "trades", {"entity": 1}) = 0
+host player_open_inventory(1, "no_such_window", {"entity": 1}) = -3
+world window-closed Steve
+host player_close_window(1) = 0
+world form Steve {"title": "Pick one", "buttons": ["Yes", "No"], "fields": [{"key": "name", "type": "text", "label": "Name"}]}
+host form_open(1, {"title": "Pick one", "buttons": ["Yes", "No"], "fields": [{"key": "name", "type": "text", "label": "Name"}]}, 64) = 1
+world form Steve {"title": 1}
+host form_open(1, {"title": 1}, 65) = 2
+world form-closed Steve
+host form_close(1) = 0
+world form Steve {"title": "Pick one", "buttons": ["Yes", "No"], "fields": [{"key": "name", "type": "text", "label": "Name"}]}
+host form_open(1, {"title": "Pick one", "buttons": ["Yes", "No"], "fields": [{"key": "name", "type": "text", "label": "Name"}]}, 66) = 3
+world dialog Steve "minecraft:confirm"
+host dialog_show(1, "minecraft:confirm", 67) = 4
+world dialog-cleared Steve
+host dialog_clear(1) = 0
+world dialog Steve "minecraft:confirm"
+host dialog_show(1, "minecraft:confirm", 68) = 5
+host player_kick(9999, "bye", {}) = -2
+world event player.join listeners=1 cancelled=0
+world event-fields {"player_name": "Steve", "player_uuid": "00000000-0000-0000-0000-000000000001", "world": "world", "message": null, "silent": null}
+# fire_event player.join player=Steve world=nether
+world event player.join listeners=0 cancelled=0
+world event-fields {"player_name": "Steve", "player_uuid": "00000000-0000-0000-0000-000000000001", "world": "nether", "message": null, "silent": null}
+# answer_form Steve 1 name=Ann
+callback token=66 ctx=4
+host value_result(4, cap=512) = 39 {"player": 1, "button": 1, "values": {"name": "Ann"}}
+host log(1, "form button 1")
+world form-answered Steve
+# click_dialog Steve confirm payload
+callback token=68 ctx=5
+host value_result(5, cap=512) = 40 {"player": 1, "id": "confirm", "payload": "payload"}
+host log(1, "dialog id confirm")
+world dialog-answered Steve
+# fire_event player.chat player=Steve message=hello
+callback token=9 ctx=6
+host event_name(6, cap=64) = 11 "player.chat"
+host event_get(6, "message", cap=512) = 7 "hello"
+host event_get(6, "no_such_field", cap=512) = -1
+host event_cancelled(6) = 0
+host event_is_post(6) = 0
+host event_set(6, "player_name", "x") = -3
+host event_set(6, "message", "hello!") = 0
+host event_fields(6, cap=512) = 114 {"player_name": "Steve", "player_uuid": "00000000-0000-0000-0000-000000000001", "world": null, "message": "hello!", "format": null, "recipients": null}
+callback token=10 ctx=7
+host event_is_post(7) = 1
+host event_cancelled(7) = 0
+host event_set(7, "message", "late") = -3
+host event_cancel_with(7, "<red>Too late</red>", {}) = -3
+host event_cancel_message(7, cap=256) = -1
+host log(1, "post delivered no message")
+world event player.chat listeners=2 cancelled=0
+world event-fields {"player_name": "Steve", "player_uuid": "00000000-0000-0000-0000-000000000001", "world": null, "message": "hello!", "format": null, "recipients": null}
+# fire_event player.chat player=Steve message=cancel
+callback token=9 ctx=8
+host event_name(8, cap=64) = 11 "player.chat"
+host event_get(8, "message", cap=512) = 8 "cancel"
+host event_get(8, "no_such_field", cap=512) = -1
+host event_cancelled(8) = 0
+host event_is_post(8) = 0
+host event_set(8, "player_name", "x") = -3
+host event_cancel_with(8, "<red>Not allowed</red>", {}) = 0
+callback token=10 ctx=9
+host event_is_post(9) = 1
+host event_cancelled(9) = 1
+host event_set(9, "message", "late") = -3
+host event_cancel_with(9, "<red>Too late</red>", {}) = -3
+host event_cancel_message(9, cap=256) = 22 "<red>Not allowed</red>"
+host log(1, "post cancelled <red>Not allowed</red>")
+world event player.chat listeners=2 cancelled=1
+world event-fields {"player_name": "Steve", "player_uuid": "00000000-0000-0000-0000-000000000001", "world": null, "message": "cancel", "format": null, "recipients": null}
+world event-cancel-message "<red>Not allowed</red>"
+# fire_event player.chat player=Steve message=ping
+callback token=9 ctx=10
+host event_name(10, cap=64) = 11 "player.chat"
+host event_get(10, "message", cap=512) = 6 "ping"
+host event_get(10, "no_such_field", cap=512) = -1
+host event_cancelled(10) = 0
+host event_is_post(10) = 0
+host event_set(10, "player_name", "x") = -3
+host event_emit("example:pong", {"from": "chat"}) = 0
+host event_emit("nocolon", {"from": "chat"}) = -3
+host event_set(10, "message", "ping!") = 0
+host event_fields(10, cap=512) = 113 {"player_name": "Steve", "player_uuid": "00000000-0000-0000-0000-000000000001", "world": null, "message": "ping!", "format": null, "recipients": null}
+callback token=10 ctx=11
+host event_is_post(11) = 1
+host event_cancelled(11) = 0
+host event_set(11, "message", "late") = -3
+host event_cancel_with(11, "<red>Too late</red>", {}) = -3
+host event_cancel_message(11, cap=256) = -1
+host log(1, "post delivered no message")
+world event player.chat listeners=2 cancelled=0
+world event-fields {"player_name": "Steve", "player_uuid": "00000000-0000-0000-0000-000000000001", "world": null, "message": "ping!", "format": null, "recipients": null}
+# emit_event example:ping from=Alex level=3
+callback token=12 ctx=12
+host event_payload(12, cap=512) = 21 {"from": "Alex", "level": 3}
+host log(1, "ping level 3")
+world emitted example:ping heard=1
+# join Alex
+world join Alex handle=2
+callback token=3 ctx=13
+host event_player(13) = 2
+host player_name(2, cap=256) = 4 "Alex"
+host data_get_bool(2, "welcomed", 0) = 0
+host data_set_bool(2, "welcomed", 1) = 0
+host config_i64("welcome-bonus", 50) = 50
+host data_get_i64(2, "coins", 0) = 0
+host data_set_i64(2, "coins", 50) = 0
+host player_send(2, "@welcome", {name="Alex", amount="50"}) = 0
+world send Alex "<gold>Welcome, <yellow>Alex</yellow>! Here is <green>50</green> coins to get started."
+world event player.join listeners=1 cancelled=0
+# fire_event player.chat player=Alex message=bye
+callback token=9 ctx=14
+host event_name(14, cap=64) = 11 "player.chat"
+host event_get(14, "message", cap=512) = 5 "bye"
+host event_get(14, "no_such_field", cap=512) = -1
+host event_cancelled(14) = 0
+host event_is_post(14) = 0
+host event_set(14, "player_name", "x") = -3
+host event_player(14) = 2
+world kick Alex "<red>Bye</red>"
+host player_kick(2, "<red>Bye</red>", {}) = 0
+callback token=10 ctx=15
+host event_is_post(15) = 1
+host event_cancelled(15) = 0
+host event_set(15, "message", "late") = -3
+host event_cancel_with(15, "<red>Too late</red>", {}) = -3
+host event_cancel_message(15, cap=256) = -1
+host log(1, "post delivered no message")
+world event player.chat listeners=2 cancelled=0
+world event-fields {"player_name": "Alex", "player_uuid": "00000000-0000-0000-0000-000000000002", "world": null, "message": "bye", "format": null, "recipients": null}

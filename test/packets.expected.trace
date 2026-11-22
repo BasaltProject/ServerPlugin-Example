@@ -1,0 +1,217 @@
+# enable
+init
+host translate("shop-title", {}, cap=256) = 20 "<dark_gray>Coin Shop"
+host menu_create("<dark_gray>Coin Shop", 3) = 1
+host config_i64("shop.sparkles-price", 100) = 100
+host translate("shop-item-sparkles", {}, cap=256) = 14 "<aqua>Sparkles"
+host translate("shop-item-sparkles-lore", {price="100"}, cap=256) = 37 "<gray>100 coins, a burst of particles"
+host menu_set(1, 11, "minecraft:blaze_powder", "<aqua>Sparkles", "<gray>100 coins, a burst of particles", 1) = 0
+host config_i64("shop.fireworks-price", 150) = 150
+host translate("shop-item-fireworks", {}, cap=256) = 23 "<light_purple>Fireworks"
+host translate("shop-item-fireworks-lore", {price="150"}, cap=256) = 42 "<gray>150 coins, one firework at your feet"
+host menu_set(1, 15, "minecraft:firework_rocket", "<light_purple>Fireworks", "<gray>150 coins, one firework at your feet", 2) = 0
+host event_on("player.join", 2, 3) = 0
+host config_i64("payout-period", 1200) = 1200
+host task_every(1200, 1200, 4) = 1
+host placeholder_register("coins", 5) = 0
+host command_register("coins [target: word]", "", 6) = 0
+host command_register("coins top [limit: int 1..25]", "", 7) = 0
+host command_register("shop", "example.shop", 8) = 0
+host event_on_ex("player.chat", 2, 0, none, 9) = 0
+host event_on_ex("player.chat", 4, 3, none, 10) = 0
+host event_on_ex("player.join", 1, 0, {"world": "world"}, 11) = 0
+host event_on_ex("example:ping", 2, 0, none, 12) = 0
+host event_on_ex("no.such.event", 2, 0, none, 13) = -3
+host permission_provide(10, 3, 14) = 1
+host service_register("example.echo", 15) = 1
+host command_register("srv hello", "", 16) = 0
+host command_register("srv perms", "", 17) = 0
+host command_register("srv broadcast", "", 18) = 0
+host command_register("srv info", "", 19) = 0
+host command_register("srv admin", "", 20) = 0
+host command_register("srv files", "", 21) = 0
+host command_register("srv store", "", 22) = 0
+host command_register("srv service", "", 23) = 0
+host command_register("srv later", "", 24) = 0
+host command_register("srv manage", "", 25) = 0
+host command_register("srv unmanage", "", 26) = 0
+host command_register("worlds", "", 27) = 0
+host command_register("hud board", "", 28) = 0
+host command_register("hud bars", "", 29) = 0
+host command_register("hud holograms", "", 30) = 0
+host command_register("hud npcs", "", 31) = 0
+host command_register("hud npc-end", "", 32) = 0
+host command_register("hud tab", "", 33) = 0
+host command_register("hud surfaces", "", 34) = 0
+host command_register("hud surface-end", "", 35) = 0
+host command_register("items give <id: word> [count: int 1..64]", "", 36) = 0
+host command_register("items take <id: word> [count: int 1..64]", "", 37) = 0
+host command_register("items count <id: word>", "", 38) = 0
+host command_register("items slot <slot: int 0..40>", "", 39) = 0
+host command_register("items hand", "", 40) = 0
+host command_register("items chest", "", 41) = 0
+host command_register("items ender", "", 42) = 0
+host command_register("items cooldown <id: word> <ticks: int 0..1000>", "", 43) = 0
+host command_register("items registry <kind: word> <key: word>", "", 44) = 0
+host command_register("items level <level: int 1..10>", "", 45) = 0
+host command_register("items recipes", "", 46) = 0
+host command_register("items book", "", 47) = 0
+host command_register("items craft", "", 48) = 0
+host command_register("items menu", "", 49) = 0
+host command_register("items closemenu", "", 50) = 0
+host command_register("items window", "", 51) = 0
+host command_register("items merchant", "", 52) = 0
+host command_register("items loot", "", 53) = 0
+host command_register("entities tour", "", 54) = 0
+host command_register("entities bad", "", 55) = 0
+host event_on("plugin.enable", 2, 56) = 0
+host channel_listen("example:chan", 57) = 0
+host packet_listen("serverbound.chat_message", {"priority": "first"}, 58) = 1
+host packet_listen("clientbound.*", {"observe": true}, 59) = 2
+host packet_listen("serverbound.play.*", {"priority": "late", "observe": true}, 60) = 3
+host packet_listen("serverbound.chat_command", null, 61) = 4
+host packet_listen("nope", null, 62) = -3
+host command_register("pkt <action: word>", "", 63) = 0
+callback token=56 ctx=1
+host config_i64("payout-amount", 5) = 5
+host config_i64("payout-period", 1200) = 1200
+host log(1, "ready: 5 coins every 1200 ticks")
+world event plugin.enable listeners=1 cancelled=0
+# join Steve
+world join Steve handle=1
+callback token=3 ctx=2
+host event_player(2) = 1
+host player_name(1, cap=256) = 5 "Steve"
+host data_get_bool(1, "welcomed", 0) = 0
+host data_set_bool(1, "welcomed", 1) = 0
+host config_i64("welcome-bonus", 50) = 50
+host data_get_i64(1, "coins", 0) = 0
+host data_set_i64(1, "coins", 50) = 0
+host player_send(1, "@welcome", {name="Steve", amount="50"}) = 0
+world send Steve "<gold>Welcome, <yellow>Steve</yellow>! Here is <green>50</green> coins to get started."
+world event player.join listeners=1 cancelled=0
+# command Steve pkt info
+callback token=63 ctx=3
+host command_arg_str(3, "action", cap=256) = 4 "info"
+host command_source_name(3, cap=256) = 5 "Steve"
+host player_by_name("Steve") = 1
+host packet_names("serverbound", cap=1024) = 87 ["serverbound.chat_message", "serverbound.chat_command", "serverbound.play.custom_payload"]
+host packet_names("", cap=1024) = 172 ["clientbound.set_title_text", "clientbound.system_chat", "clientbound.configuration.0x07", "serverbound.chat_message", "serverbound.chat_command", "serverbound.play.custom_payload"]
+host packet_lookup("serverbound.chat_message", cap=1024) = 73 {"name": "serverbound.chat_message", "phase": "play", "serverbound": true, "id": 8, "wildcard": false}
+host packet_lookup("clientbound.play.*", cap=1024) = 61 {"name": "clientbound.play.*", "phase": null, "serverbound": null, "id": null, "wildcard": true}
+host packet_lookup("bogus.name", cap=1024) = -3
+host packet_player_actions(cap=1024) = 261 ["use_item", "use_item_on", "container_click", "interact", "attack", "custom_payload", "chat_command", "move", "pick_block", "pick_entity", "place_recipe", "creative_slot", "sign_update", "rename_item", "beacon", "select_trade", "container_button", "container_close", "held_slot", "chat", "edit_book"]
+# command Steve pkt send
+callback token=63 ctx=4
+host command_arg_str(4, "action", cap=256) = 4 "send"
+host command_source_name(4, cap=256) = 5 "Steve"
+host player_by_name("Steve") = 1
+host packet_send(1, "clientbound.set_title_text", b"6869", 0) = 1
+world packet-sent Steve clientbound.set_title_text b"6869"
+host packet_send(1, "serverbound.chat_message", b"78", 0) = -3
+host packet_send(1, "clientbound.system_chat", b"616761696e", 1) = 1
+world listeners-skipped clientbound.system_chat (re-entrant)
+world packet-sent Steve clientbound.system_chat b"616761696e"
+# command Steve pkt recv
+callback token=63 ctx=5
+host command_arg_str(5, "action", cap=256) = 4 "recv"
+host command_source_name(5, cap=256) = 5 "Steve"
+host player_by_name("Steve") = 1
+host packet_receive(1, "serverbound.chat_command", b"2f68656c70", 0) = 1
+world packet-handled Steve serverbound.chat_command b"2f68656c70"
+host packet_receive(1, "clientbound.set_title_text", b"78", 0) = -3
+# command Steve pkt chan
+callback token=63 ctx=6
+host command_arg_str(6, "action", cap=256) = 4 "chan"
+host command_source_name(6, cap=256) = 5 "Steve"
+host player_by_name("Steve") = 1
+host channel_send(1, "example:chan", b"70696e67") = 1
+world channel-out Steve "example:chan" b"70696e67"
+host channel_send(0, "example:chan", b"70696e67") = -3
+# command Steve pkt action
+callback token=63 ctx=7
+host command_arg_str(7, "action", cap=256) = 6 "action"
+host command_source_name(7, cap=256) = 5 "Steve"
+host player_by_name("Steve") = 1
+host packet_player_receive(1, "held_slot", [3]) = 1
+world player-receive Steve held_slot [3]
+host packet_player_receive(1, "custom_payload", ["example:chan", "pong"]) = 1
+world player-receive Steve custom_payload ["example:chan", "pong"]
+host packet_player_receive(1, "bogus", [3]) = -3
+# packet_in Steve serverbound.chat_message 6869
+callback token=58 ctx=8
+host packet_ctx_body(8, cap=1024) = 2 b"6869"
+host packet_ctx_player(8) = 1
+host packet_ctx_set_body(8, b"686923") = 0
+callback token=60 ctx=9
+host packet_ctx_info(9, cap=1024) = 184 {"kind": "packet", "name": "serverbound.chat_message", "phase": "play", "id": 8, "serverbound": true, "connection": 1, "protocol": 777, "translated": false, "size": 2, "player_name": "Steve", "player_uuid": "uuid-Steve", "cancelled": false, "observer": true}
+host log(1, "serverbound.chat_message")
+host packet_ctx_cancel(9) = -4
+world packet serverbound.chat_message delivered b"686923"
+# packet_in Steve serverbound.chat_message 21686c70
+callback token=58 ctx=10
+host packet_ctx_body(10, cap=1024) = 4 b"21686c70"
+host packet_ctx_player(10) = 1
+host packet_ctx_cancel(10) = 0
+callback token=60 ctx=11
+host packet_ctx_info(11, cap=1024) = 184 {"kind": "packet", "name": "serverbound.chat_message", "phase": "play", "id": 8, "serverbound": true, "connection": 1, "protocol": 777, "translated": false, "size": 4, "player_name": "Steve", "player_uuid": "uuid-Steve", "cancelled": true, "observer": true}
+host log(1, "serverbound.chat_message")
+host packet_ctx_cancel(11) = -4
+world packet serverbound.chat_message cancelled
+# packet_out Steve clientbound.set_title_text 7469746c65
+callback token=59 ctx=12
+host packet_ctx_info(12, cap=1024) = 187 {"kind": "packet", "name": "clientbound.set_title_text", "phase": "play", "id": 106, "serverbound": false, "connection": 1, "protocol": 777, "translated": false, "size": 5, "player_name": "Steve", "player_uuid": "uuid-Steve", "cancelled": false, "observer": true}
+host log(1, "clientbound.set_title_text")
+host packet_ctx_cancel(12) = -4
+world packet clientbound.set_title_text delivered b"7469746c65"
+# packet_in Steve serverbound.chat_command 2f686f6d65
+callback token=61 ctx=13
+host packet_ctx_send(13, "clientbound.system_chat", b"6f6b", 0) = 1
+world connection-sent Steve clientbound.system_chat b"6f6b"
+host packet_ctx_receive(13, "serverbound.chat_message", b"6869", 1) = 1
+world connection-received Steve serverbound.chat_message b"6869"
+world listeners-skipped serverbound.chat_message (re-entrant)
+host packet_ctx_send(13, "serverbound.chat_message", b"6e6f", 0) = -3
+callback token=60 ctx=14
+host packet_ctx_info(14, cap=1024) = 184 {"kind": "packet", "name": "serverbound.chat_command", "phase": "play", "id": 6, "serverbound": true, "connection": 1, "protocol": 777, "translated": false, "size": 5, "player_name": "Steve", "player_uuid": "uuid-Steve", "cancelled": false, "observer": true}
+host log(1, "serverbound.chat_command")
+host packet_ctx_cancel(14) = -4
+world packet serverbound.chat_command delivered b"2f686f6d65"
+# channel_in Steve example:chan hello
+callback token=57 ctx=15
+host packet_ctx_info(15, cap=1024) = 88 {"kind": "channel", "channel": "example:chan", "size": 5, "player_name": "Steve", "player_uuid": "uuid-Steve"}
+host packet_ctx_body(15, cap=1024) = 5 b"68656c6c6f"
+host packet_ctx_player(15) = 1
+host channel_send(1, "example:chan", b"68656c6c6f") = 1
+world channel-out Steve "example:chan" b"68656c6c6f"
+host packet_ctx_cancel(15) = -3
+world channel example:chan listeners=1
+# command Steve pkt stale
+callback token=63 ctx=16
+host command_arg_str(16, "action", cap=256) = 5 "stale"
+host command_source_name(16, cap=256) = 5 "Steve"
+host player_by_name("Steve") = 1
+host packet_ctx_cancel(10) = -2
+host packet_ctx_info(9999, cap=1024) = -3
+# command Steve pkt unlisten
+callback token=63 ctx=17
+host command_arg_str(17, "action", cap=256) = 8 "unlisten"
+host command_source_name(17, cap=256) = 5 "Steve"
+host player_by_name("Steve") = 1
+host packet_unlisten(4) = 0
+host packet_unlisten(4) = -2
+host packet_unlisten(0) = -3
+# packet_in Steve serverbound.chat_command 2f686f6d65
+callback token=60 ctx=18
+host packet_ctx_info(18, cap=1024) = 184 {"kind": "packet", "name": "serverbound.chat_command", "phase": "play", "id": 6, "serverbound": true, "connection": 1, "protocol": 777, "translated": false, "size": 5, "player_name": "Steve", "player_uuid": "uuid-Steve", "cancelled": false, "observer": true}
+host log(1, "serverbound.chat_command")
+host packet_ctx_cancel(18) = -4
+world packet serverbound.chat_command delivered b"2f686f6d65"
+# leave Steve
+world event player.leave listeners=0 cancelled=0
+world leave Steve
+# packet_out Steve clientbound.set_title_text 7469746c65
+world packet-rejected Steve (not online)
+# disable
+world event plugin.disable listeners=0 cancelled=0
+world plugin-disabled requested

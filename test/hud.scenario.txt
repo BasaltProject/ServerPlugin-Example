@@ -1,0 +1,21 @@
+# Scoreboards and teams on a board of the plugin
+enable
+join Steve
+join Alex
+command Steve hud board
+# Boss bars, a kept one and an attached handle
+command Steve hud bars
+# Holograms
+command Steve hud holograms
+# NPC with a click callback, then removed
+command Steve hud npcs
+npc-click 1 Alex
+command Steve hud npc-end
+# Tab list and player HUD properties
+command Steve hud tab
+# A sidebar claim drawn per player by a render callback
+command Steve hud surfaces
+redraw
+command Steve hud surface-end
+redraw
+disable

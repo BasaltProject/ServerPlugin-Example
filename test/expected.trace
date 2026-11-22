@@ -1,0 +1,651 @@
+# enable
+init
+host translate("shop-title", {}, cap=256) = 20 "<dark_gray>Coin Shop"
+host menu_create("<dark_gray>Coin Shop", 3) = 1
+host config_i64("shop.sparkles-price", 100) = 100
+host translate("shop-item-sparkles", {}, cap=256) = 14 "<aqua>Sparkles"
+host translate("shop-item-sparkles-lore", {price="100"}, cap=256) = 37 "<gray>100 coins, a burst of particles"
+host menu_set(1, 11, "minecraft:blaze_powder", "<aqua>Sparkles", "<gray>100 coins, a burst of particles", 1) = 0
+host config_i64("shop.fireworks-price", 150) = 150
+host translate("shop-item-fireworks", {}, cap=256) = 23 "<light_purple>Fireworks"
+host translate("shop-item-fireworks-lore", {price="150"}, cap=256) = 42 "<gray>150 coins, one firework at your feet"
+host menu_set(1, 15, "minecraft:firework_rocket", "<light_purple>Fireworks", "<gray>150 coins, one firework at your feet", 2) = 0
+host event_on("player.join", 2, 3) = 0
+host config_i64("payout-period", 1200) = 1200
+host task_every(1200, 1200, 4) = 1
+host placeholder_register("coins", 5) = 0
+host command_register("coins [target: word]", "", 6) = 0
+host command_register("coins top [limit: int 1..25]", "", 7) = 0
+host command_register("shop", "example.shop", 8) = 0
+host event_on_ex("player.chat", 2, 0, none, 9) = 0
+host event_on_ex("player.chat", 4, 3, none, 10) = 0
+host event_on_ex("player.join", 1, 0, {"world": "world"}, 11) = 0
+host event_on_ex("example:ping", 2, 0, none, 12) = 0
+host event_on_ex("no.such.event", 2, 0, none, 13) = -3
+host permission_provide(10, 3, 14) = 1
+host service_register("example.echo", 15) = 1
+host command_register("srv hello", "", 16) = 0
+host command_register("srv perms", "", 17) = 0
+host command_register("srv broadcast", "", 18) = 0
+host command_register("srv info", "", 19) = 0
+host command_register("srv admin", "", 20) = 0
+host command_register("srv files", "", 21) = 0
+host command_register("srv store", "", 22) = 0
+host command_register("srv service", "", 23) = 0
+host command_register("srv later", "", 24) = 0
+host command_register("srv manage", "", 25) = 0
+host command_register("srv unmanage", "", 26) = 0
+host command_register("worlds", "", 27) = 0
+host command_register("hud board", "", 28) = 0
+host command_register("hud bars", "", 29) = 0
+host command_register("hud holograms", "", 30) = 0
+host command_register("hud npcs", "", 31) = 0
+host command_register("hud npc-end", "", 32) = 0
+host command_register("hud tab", "", 33) = 0
+host command_register("hud surfaces", "", 34) = 0
+host command_register("hud surface-end", "", 35) = 0
+host command_register("items give <id: word> [count: int 1..64]", "", 36) = 0
+host command_register("items take <id: word> [count: int 1..64]", "", 37) = 0
+host command_register("items count <id: word>", "", 38) = 0
+host command_register("items slot <slot: int 0..40>", "", 39) = 0
+host command_register("items hand", "", 40) = 0
+host command_register("items chest", "", 41) = 0
+host command_register("items ender", "", 42) = 0
+host command_register("items cooldown <id: word> <ticks: int 0..1000>", "", 43) = 0
+host command_register("items registry <kind: word> <key: word>", "", 44) = 0
+host command_register("items level <level: int 1..10>", "", 45) = 0
+host command_register("items recipes", "", 46) = 0
+host command_register("items book", "", 47) = 0
+host command_register("items craft", "", 48) = 0
+host command_register("items menu", "", 49) = 0
+host command_register("items closemenu", "", 50) = 0
+host command_register("items window", "", 51) = 0
+host command_register("items merchant", "", 52) = 0
+host command_register("items loot", "", 53) = 0
+host command_register("entities tour", "", 54) = 0
+host command_register("entities bad", "", 55) = 0
+host event_on("plugin.enable", 2, 56) = 0
+host channel_listen("example:chan", 57) = 0
+host packet_listen("serverbound.chat_message", {"priority": "first"}, 58) = 1
+host packet_listen("clientbound.*", {"observe": true}, 59) = 2
+host packet_listen("serverbound.play.*", {"priority": "late", "observe": true}, 60) = 3
+host packet_listen("serverbound.chat_command", null, 61) = 4
+host packet_listen("nope", null, 62) = -3
+host command_register("pkt <action: word>", "", 63) = 0
+callback token=56 ctx=1
+host config_i64("payout-amount", 5) = 5
+host config_i64("payout-period", 1200) = 1200
+host log(1, "ready: 5 coins every 1200 ticks")
+world event plugin.enable listeners=1 cancelled=0
+# command console coins top
+callback token=7 ctx=2
+host command_arg_i64(2, "limit") = -1
+host store_top("coins", 10, cap=1024) = 0 []
+host command_reply(2, "@top-empty", {}) = 0
+world reply CONSOLE "<gray>Nobody has any coins yet."
+# join Steve
+world join Steve handle=1
+callback token=3 ctx=3
+host event_player(3) = 1
+host player_name(1, cap=256) = 5 "Steve"
+host data_get_bool(1, "welcomed", 0) = 0
+host data_set_bool(1, "welcomed", 1) = 0
+host config_i64("welcome-bonus", 50) = 50
+host data_get_i64(1, "coins", 0) = 0
+host data_set_i64(1, "coins", 50) = 0
+host player_send(1, "@welcome", {name="Steve", amount="50"}) = 0
+world send Steve "<gold>Welcome, <yellow>Steve</yellow>! Here is <green>50</green> coins to get started."
+world event player.join listeners=1 cancelled=0
+# join Alex
+world join Alex handle=2
+callback token=3 ctx=4
+host event_player(4) = 2
+host player_name(2, cap=256) = 4 "Alex"
+host data_get_bool(2, "welcomed", 0) = 0
+host data_set_bool(2, "welcomed", 1) = 0
+host config_i64("welcome-bonus", 50) = 50
+host data_get_i64(2, "coins", 0) = 0
+host data_set_i64(2, "coins", 50) = 0
+host player_send(2, "@welcome", {name="Alex", amount="50"}) = 0
+world send Alex "<gold>Welcome, <yellow>Alex</yellow>! Here is <green>50</green> coins to get started."
+world event player.join listeners=1 cancelled=0
+# join Bob
+world join Bob handle=3
+callback token=3 ctx=5
+host event_player(5) = 3
+host player_name(3, cap=256) = 3 "Bob"
+host data_get_bool(3, "welcomed", 0) = 0
+host data_set_bool(3, "welcomed", 1) = 0
+host config_i64("welcome-bonus", 50) = 50
+host data_get_i64(3, "coins", 0) = 0
+host data_set_i64(3, "coins", 50) = 0
+host player_send(3, "@welcome", {name="Bob", amount="50"}) = 0
+world send Bob "<gold>Welcome, <yellow>Bob</yellow>! Here is <green>50</green> coins to get started."
+world event player.join listeners=1 cancelled=0
+# leave Steve
+world event player.leave listeners=0 cancelled=0
+world leave Steve
+# join Steve
+world join Steve handle=4
+callback token=3 ctx=6
+host event_player(6) = 4
+host player_name(4, cap=256) = 5 "Steve"
+host data_get_bool(4, "welcomed", 0) = 1
+host data_get_i64(4, "coins", 0) = 50
+host player_send(4, "@welcome-back", {name="Steve", amount="50"}) = 0
+world send Steve "<gray>Welcome back, Steve. Balance: <gold>50</gold> coins."
+world event player.join listeners=1 cancelled=0
+# command Steve coins
+callback token=6 ctx=7
+host command_arg_str(7, "target", cap=256) = -1
+host command_is_console(7) = 0
+host command_source_name(7, cap=256) = 5 "Steve"
+host player_by_name("Steve") = 4
+host data_get_i64(4, "coins", 0) = 50
+host command_reply(7, "@balance-self", {amount="50"}) = 0
+world reply Steve "<gray>You have <gold>50</gold> coins."
+# command Steve coins Alex
+callback token=6 ctx=8
+host command_arg_str(8, "target", cap=256) = 4 "Alex"
+host player_by_name("Alex") = 2
+host player_name(2, cap=256) = 4 "Alex"
+host data_get_i64(2, "coins", 0) = 50
+host command_reply(8, "@balance-other", {name="Alex", amount="50"}) = 0
+world reply Steve "<gray>Alex has <gold>50</gold> coins."
+# command Steve coins Nobody
+callback token=6 ctx=9
+host command_arg_str(9, "target", cap=256) = 6 "Nobody"
+host player_by_name("Nobody") = 0
+host command_reply(9, "@balance-usage", {}) = 0
+world reply Steve "<red>Usage: /coins [player]"
+# command console coins
+callback token=6 ctx=10
+host command_arg_str(10, "target", cap=256) = -1
+host command_is_console(10) = 1
+host command_reply(10, "@balance-usage", {}) = 0
+world reply CONSOLE "<red>Usage: /coins [player]"
+# command console coins Steve
+callback token=6 ctx=11
+host command_arg_str(11, "target", cap=256) = 5 "Steve"
+host player_by_name("Steve") = 4
+host player_name(4, cap=256) = 5 "Steve"
+host data_get_i64(4, "coins", 0) = 50
+host command_reply(11, "@balance-other", {name="Steve", amount="50"}) = 0
+world reply CONSOLE "<gray>Steve has <gold>50</gold> coins."
+# command Steve coins Alex extra
+world usage Steve "coins [target: word]"
+# command Steve coins top 3
+callback token=7 ctx=12
+host command_arg_i64(12, "limit") = 0 out=3
+host store_top("coins", 3, cap=1024) = 48 ["Alex"=50, "Bob"=50, "Steve"=50]
+host command_reply(12, "@top-header", {}) = 0
+world reply Steve "<gold><bold>Top coins</bold>"
+host command_reply(12, "@top-row", {rank="1", name="Alex", amount="50"}) = 0
+world reply Steve "<gray>1. Alex <gold>50</gold>"
+host command_reply(12, "@top-row", {rank="2", name="Bob", amount="50"}) = 0
+world reply Steve "<gray>2. Bob <gold>50</gold>"
+host command_reply(12, "@top-row", {rank="3", name="Steve", amount="50"}) = 0
+world reply Steve "<gray>3. Steve <gold>50</gold>"
+# command Steve coins top 1
+callback token=7 ctx=13
+host command_arg_i64(13, "limit") = 0 out=1
+host store_top("coins", 1, cap=1024) = 16 ["Alex"=50]
+host command_reply(13, "@top-header", {}) = 0
+world reply Steve "<gold><bold>Top coins</bold>"
+host command_reply(13, "@top-row", {rank="1", name="Alex", amount="50"}) = 0
+world reply Steve "<gray>1. Alex <gold>50</gold>"
+# command Steve coins top
+callback token=7 ctx=14
+host command_arg_i64(14, "limit") = -1
+host store_top("coins", 10, cap=1024) = 48 ["Alex"=50, "Bob"=50, "Steve"=50]
+host command_reply(14, "@top-header", {}) = 0
+world reply Steve "<gold><bold>Top coins</bold>"
+host command_reply(14, "@top-row", {rank="1", name="Alex", amount="50"}) = 0
+world reply Steve "<gray>1. Alex <gold>50</gold>"
+host command_reply(14, "@top-row", {rank="2", name="Bob", amount="50"}) = 0
+world reply Steve "<gray>2. Bob <gold>50</gold>"
+host command_reply(14, "@top-row", {rank="3", name="Steve", amount="50"}) = 0
+world reply Steve "<gray>3. Steve <gold>50</gold>"
+# command Steve coins top 0
+world usage Steve "coins top [limit: int 1..25]"
+# command Steve coins top 26
+world usage Steve "coins top [limit: int 1..25]"
+# command Steve unknown
+world unknown-command "unknown"
+# placeholder coins Steve
+callback token=5 ctx=15
+host placeholder_player(15) = 4
+host data_get_i64(4, "coins", 0) = 50
+host placeholder_result(15, "50") = 0
+world placeholder coins = "50"
+# placeholder coins none
+callback token=5 ctx=16
+host placeholder_player(16) = 0
+host placeholder_result(16, "0") = 0
+world placeholder coins = "0"
+# placeholder missing none
+world placeholder-unknown missing
+# command console shop
+callback token=8 ctx=17
+host command_is_console(17) = 1
+host command_reply(17, "@shop-players-only", {}) = 0
+world reply CONSOLE "<red>The shop needs a player, not the console."
+# command Steve shop
+callback token=8 ctx=18
+host command_is_console(18) = 0
+host command_source_name(18, cap=256) = 5 "Steve"
+host player_by_name("Steve") = 4
+host menu_open(1, 4) = 0
+world menu 1 opens for Steve title="<dark_gray>Coin Shop" rows=3
+world menu-slot 11 item="minecraft:blaze_powder" name="<aqua>Sparkles" lore="<gray>100 coins, a burst of particles"
+world menu-slot 15 item="minecraft:firework_rocket" name="<light_purple>Fireworks" lore="<gray>150 coins, one firework at your feet"
+# click 1 11 Steve
+callback token=1 ctx=19
+host menu_click_player(19) = 4
+host config_i64("shop.sparkles-price", 100) = 100
+host data_get_i64(4, "coins", 0) = 50
+host data_get_i64(4, "coins", 0) = 50
+host player_send(4, "@shop-cant-afford", {price="100", amount="50"}) = 0
+world send Steve "<red>You need 100 coins for that; you have 50."
+# click 1 15 Steve
+callback token=2 ctx=20
+host menu_click_player(20) = 4
+host config_i64("shop.fireworks-price", 150) = 150
+host data_get_i64(4, "coins", 0) = 50
+host data_get_i64(4, "coins", 0) = 50
+host player_send(4, "@shop-cant-afford", {price="150", amount="50"}) = 0
+world send Steve "<red>You need 150 coins for that; you have 50."
+# click 1 13 Steve
+world click-ignored menu=1 slot=13
+# tick 1199
+# tick 1
+world task 1 fires at=1200
+callback token=4 ctx=21
+host config_i64("payout-amount", 5) = 5
+host players_online(cap=64) = 3 [2,3,4]
+host data_get_i64(2, "coins", 0) = 50
+host data_set_i64(2, "coins", 55) = 0
+host player_action_bar(2, "@payout", {amount="5", balance="55"}) = 0
+world action-bar Alex "<gray>+5 coins for playing. Balance: <gold>55</gold>."
+host data_get_i64(3, "coins", 0) = 50
+host data_set_i64(3, "coins", 55) = 0
+host player_action_bar(3, "@payout", {amount="5", balance="55"}) = 0
+world action-bar Bob "<gray>+5 coins for playing. Balance: <gold>55</gold>."
+host data_get_i64(4, "coins", 0) = 50
+host data_set_i64(4, "coins", 55) = 0
+host player_action_bar(4, "@payout", {amount="5", balance="55"}) = 0
+world action-bar Steve "<gray>+5 coins for playing. Balance: <gold>55</gold>."
+# tick 10800
+world task 1 fires at=2400
+callback token=4 ctx=22
+host config_i64("payout-amount", 5) = 5
+host players_online(cap=64) = 3 [2,3,4]
+host data_get_i64(2, "coins", 0) = 55
+host data_set_i64(2, "coins", 60) = 0
+host player_action_bar(2, "@payout", {amount="5", balance="60"}) = 0
+world action-bar Alex "<gray>+5 coins for playing. Balance: <gold>60</gold>."
+host data_get_i64(3, "coins", 0) = 55
+host data_set_i64(3, "coins", 60) = 0
+host player_action_bar(3, "@payout", {amount="5", balance="60"}) = 0
+world action-bar Bob "<gray>+5 coins for playing. Balance: <gold>60</gold>."
+host data_get_i64(4, "coins", 0) = 55
+host data_set_i64(4, "coins", 60) = 0
+host player_action_bar(4, "@payout", {amount="5", balance="60"}) = 0
+world action-bar Steve "<gray>+5 coins for playing. Balance: <gold>60</gold>."
+world task 1 fires at=3600
+callback token=4 ctx=23
+host config_i64("payout-amount", 5) = 5
+host players_online(cap=64) = 3 [2,3,4]
+host data_get_i64(2, "coins", 0) = 60
+host data_set_i64(2, "coins", 65) = 0
+host player_action_bar(2, "@payout", {amount="5", balance="65"}) = 0
+world action-bar Alex "<gray>+5 coins for playing. Balance: <gold>65</gold>."
+host data_get_i64(3, "coins", 0) = 60
+host data_set_i64(3, "coins", 65) = 0
+host player_action_bar(3, "@payout", {amount="5", balance="65"}) = 0
+world action-bar Bob "<gray>+5 coins for playing. Balance: <gold>65</gold>."
+host data_get_i64(4, "coins", 0) = 60
+host data_set_i64(4, "coins", 65) = 0
+host player_action_bar(4, "@payout", {amount="5", balance="65"}) = 0
+world action-bar Steve "<gray>+5 coins for playing. Balance: <gold>65</gold>."
+world task 1 fires at=4800
+callback token=4 ctx=24
+host config_i64("payout-amount", 5) = 5
+host players_online(cap=64) = 3 [2,3,4]
+host data_get_i64(2, "coins", 0) = 65
+host data_set_i64(2, "coins", 70) = 0
+host player_action_bar(2, "@payout", {amount="5", balance="70"}) = 0
+world action-bar Alex "<gray>+5 coins for playing. Balance: <gold>70</gold>."
+host data_get_i64(3, "coins", 0) = 65
+host data_set_i64(3, "coins", 70) = 0
+host player_action_bar(3, "@payout", {amount="5", balance="70"}) = 0
+world action-bar Bob "<gray>+5 coins for playing. Balance: <gold>70</gold>."
+host data_get_i64(4, "coins", 0) = 65
+host data_set_i64(4, "coins", 70) = 0
+host player_action_bar(4, "@payout", {amount="5", balance="70"}) = 0
+world action-bar Steve "<gray>+5 coins for playing. Balance: <gold>70</gold>."
+world task 1 fires at=6000
+callback token=4 ctx=25
+host config_i64("payout-amount", 5) = 5
+host players_online(cap=64) = 3 [2,3,4]
+host data_get_i64(2, "coins", 0) = 70
+host data_set_i64(2, "coins", 75) = 0
+host player_action_bar(2, "@payout", {amount="5", balance="75"}) = 0
+world action-bar Alex "<gray>+5 coins for playing. Balance: <gold>75</gold>."
+host data_get_i64(3, "coins", 0) = 70
+host data_set_i64(3, "coins", 75) = 0
+host player_action_bar(3, "@payout", {amount="5", balance="75"}) = 0
+world action-bar Bob "<gray>+5 coins for playing. Balance: <gold>75</gold>."
+host data_get_i64(4, "coins", 0) = 70
+host data_set_i64(4, "coins", 75) = 0
+host player_action_bar(4, "@payout", {amount="5", balance="75"}) = 0
+world action-bar Steve "<gray>+5 coins for playing. Balance: <gold>75</gold>."
+world task 1 fires at=7200
+callback token=4 ctx=26
+host config_i64("payout-amount", 5) = 5
+host players_online(cap=64) = 3 [2,3,4]
+host data_get_i64(2, "coins", 0) = 75
+host data_set_i64(2, "coins", 80) = 0
+host player_action_bar(2, "@payout", {amount="5", balance="80"}) = 0
+world action-bar Alex "<gray>+5 coins for playing. Balance: <gold>80</gold>."
+host data_get_i64(3, "coins", 0) = 75
+host data_set_i64(3, "coins", 80) = 0
+host player_action_bar(3, "@payout", {amount="5", balance="80"}) = 0
+world action-bar Bob "<gray>+5 coins for playing. Balance: <gold>80</gold>."
+host data_get_i64(4, "coins", 0) = 75
+host data_set_i64(4, "coins", 80) = 0
+host player_action_bar(4, "@payout", {amount="5", balance="80"}) = 0
+world action-bar Steve "<gray>+5 coins for playing. Balance: <gold>80</gold>."
+world task 1 fires at=8400
+callback token=4 ctx=27
+host config_i64("payout-amount", 5) = 5
+host players_online(cap=64) = 3 [2,3,4]
+host data_get_i64(2, "coins", 0) = 80
+host data_set_i64(2, "coins", 85) = 0
+host player_action_bar(2, "@payout", {amount="5", balance="85"}) = 0
+world action-bar Alex "<gray>+5 coins for playing. Balance: <gold>85</gold>."
+host data_get_i64(3, "coins", 0) = 80
+host data_set_i64(3, "coins", 85) = 0
+host player_action_bar(3, "@payout", {amount="5", balance="85"}) = 0
+world action-bar Bob "<gray>+5 coins for playing. Balance: <gold>85</gold>."
+host data_get_i64(4, "coins", 0) = 80
+host data_set_i64(4, "coins", 85) = 0
+host player_action_bar(4, "@payout", {amount="5", balance="85"}) = 0
+world action-bar Steve "<gray>+5 coins for playing. Balance: <gold>85</gold>."
+world task 1 fires at=9600
+callback token=4 ctx=28
+host config_i64("payout-amount", 5) = 5
+host players_online(cap=64) = 3 [2,3,4]
+host data_get_i64(2, "coins", 0) = 85
+host data_set_i64(2, "coins", 90) = 0
+host player_action_bar(2, "@payout", {amount="5", balance="90"}) = 0
+world action-bar Alex "<gray>+5 coins for playing. Balance: <gold>90</gold>."
+host data_get_i64(3, "coins", 0) = 85
+host data_set_i64(3, "coins", 90) = 0
+host player_action_bar(3, "@payout", {amount="5", balance="90"}) = 0
+world action-bar Bob "<gray>+5 coins for playing. Balance: <gold>90</gold>."
+host data_get_i64(4, "coins", 0) = 85
+host data_set_i64(4, "coins", 90) = 0
+host player_action_bar(4, "@payout", {amount="5", balance="90"}) = 0
+world action-bar Steve "<gray>+5 coins for playing. Balance: <gold>90</gold>."
+world task 1 fires at=10800
+callback token=4 ctx=29
+host config_i64("payout-amount", 5) = 5
+host players_online(cap=64) = 3 [2,3,4]
+host data_get_i64(2, "coins", 0) = 90
+host data_set_i64(2, "coins", 95) = 0
+host player_action_bar(2, "@payout", {amount="5", balance="95"}) = 0
+world action-bar Alex "<gray>+5 coins for playing. Balance: <gold>95</gold>."
+host data_get_i64(3, "coins", 0) = 90
+host data_set_i64(3, "coins", 95) = 0
+host player_action_bar(3, "@payout", {amount="5", balance="95"}) = 0
+world action-bar Bob "<gray>+5 coins for playing. Balance: <gold>95</gold>."
+host data_get_i64(4, "coins", 0) = 90
+host data_set_i64(4, "coins", 95) = 0
+host player_action_bar(4, "@payout", {amount="5", balance="95"}) = 0
+world action-bar Steve "<gray>+5 coins for playing. Balance: <gold>95</gold>."
+world task 1 fires at=12000
+callback token=4 ctx=30
+host config_i64("payout-amount", 5) = 5
+host players_online(cap=64) = 3 [2,3,4]
+host data_get_i64(2, "coins", 0) = 95
+host data_set_i64(2, "coins", 100) = 0
+host player_action_bar(2, "@payout", {amount="5", balance="100"}) = 0
+world action-bar Alex "<gray>+5 coins for playing. Balance: <gold>100</gold>."
+host data_get_i64(3, "coins", 0) = 95
+host data_set_i64(3, "coins", 100) = 0
+host player_action_bar(3, "@payout", {amount="5", balance="100"}) = 0
+world action-bar Bob "<gray>+5 coins for playing. Balance: <gold>100</gold>."
+host data_get_i64(4, "coins", 0) = 95
+host data_set_i64(4, "coins", 100) = 0
+host player_action_bar(4, "@payout", {amount="5", balance="100"}) = 0
+world action-bar Steve "<gray>+5 coins for playing. Balance: <gold>100</gold>."
+# click 1 11 Steve
+callback token=1 ctx=31
+host menu_click_player(31) = 4
+host config_i64("shop.sparkles-price", 100) = 100
+host data_get_i64(4, "coins", 0) = 100
+host data_set_i64(4, "coins", 0) = 0
+host translate("shop-item-sparkles", {}, cap=256) = 14 "<aqua>Sparkles"
+host player_send(4, "@shop-bought", {item="<aqua>Sparkles", price="100"}) = 0
+world send Steve "<green>Bought <aqua>Sparkles for 100 coins."
+host player_particle(4, "minecraft:totem_of_undying", 30, 0.4) = 0
+world particle Steve "minecraft:totem_of_undying" count=30 spread=0.4
+# click 1 15 Steve
+callback token=2 ctx=32
+host menu_click_player(32) = 4
+host config_i64("shop.fireworks-price", 150) = 150
+host data_get_i64(4, "coins", 0) = 0
+host data_get_i64(4, "coins", 0) = 0
+host player_send(4, "@shop-cant-afford", {price="150", amount="0"}) = 0
+world send Steve "<red>You need 150 coins for that; you have 0."
+# tick 12000
+world task 1 fires at=13200
+callback token=4 ctx=33
+host config_i64("payout-amount", 5) = 5
+host players_online(cap=64) = 3 [2,3,4]
+host data_get_i64(2, "coins", 0) = 100
+host data_set_i64(2, "coins", 105) = 0
+host player_action_bar(2, "@payout", {amount="5", balance="105"}) = 0
+world action-bar Alex "<gray>+5 coins for playing. Balance: <gold>105</gold>."
+host data_get_i64(3, "coins", 0) = 100
+host data_set_i64(3, "coins", 105) = 0
+host player_action_bar(3, "@payout", {amount="5", balance="105"}) = 0
+world action-bar Bob "<gray>+5 coins for playing. Balance: <gold>105</gold>."
+host data_get_i64(4, "coins", 0) = 0
+host data_set_i64(4, "coins", 5) = 0
+host player_action_bar(4, "@payout", {amount="5", balance="5"}) = 0
+world action-bar Steve "<gray>+5 coins for playing. Balance: <gold>5</gold>."
+world task 1 fires at=14400
+callback token=4 ctx=34
+host config_i64("payout-amount", 5) = 5
+host players_online(cap=64) = 3 [2,3,4]
+host data_get_i64(2, "coins", 0) = 105
+host data_set_i64(2, "coins", 110) = 0
+host player_action_bar(2, "@payout", {amount="5", balance="110"}) = 0
+world action-bar Alex "<gray>+5 coins for playing. Balance: <gold>110</gold>."
+host data_get_i64(3, "coins", 0) = 105
+host data_set_i64(3, "coins", 110) = 0
+host player_action_bar(3, "@payout", {amount="5", balance="110"}) = 0
+world action-bar Bob "<gray>+5 coins for playing. Balance: <gold>110</gold>."
+host data_get_i64(4, "coins", 0) = 5
+host data_set_i64(4, "coins", 10) = 0
+host player_action_bar(4, "@payout", {amount="5", balance="10"}) = 0
+world action-bar Steve "<gray>+5 coins for playing. Balance: <gold>10</gold>."
+world task 1 fires at=15600
+callback token=4 ctx=35
+host config_i64("payout-amount", 5) = 5
+host players_online(cap=64) = 3 [2,3,4]
+host data_get_i64(2, "coins", 0) = 110
+host data_set_i64(2, "coins", 115) = 0
+host player_action_bar(2, "@payout", {amount="5", balance="115"}) = 0
+world action-bar Alex "<gray>+5 coins for playing. Balance: <gold>115</gold>."
+host data_get_i64(3, "coins", 0) = 110
+host data_set_i64(3, "coins", 115) = 0
+host player_action_bar(3, "@payout", {amount="5", balance="115"}) = 0
+world action-bar Bob "<gray>+5 coins for playing. Balance: <gold>115</gold>."
+host data_get_i64(4, "coins", 0) = 10
+host data_set_i64(4, "coins", 15) = 0
+host player_action_bar(4, "@payout", {amount="5", balance="15"}) = 0
+world action-bar Steve "<gray>+5 coins for playing. Balance: <gold>15</gold>."
+world task 1 fires at=16800
+callback token=4 ctx=36
+host config_i64("payout-amount", 5) = 5
+host players_online(cap=64) = 3 [2,3,4]
+host data_get_i64(2, "coins", 0) = 115
+host data_set_i64(2, "coins", 120) = 0
+host player_action_bar(2, "@payout", {amount="5", balance="120"}) = 0
+world action-bar Alex "<gray>+5 coins for playing. Balance: <gold>120</gold>."
+host data_get_i64(3, "coins", 0) = 115
+host data_set_i64(3, "coins", 120) = 0
+host player_action_bar(3, "@payout", {amount="5", balance="120"}) = 0
+world action-bar Bob "<gray>+5 coins for playing. Balance: <gold>120</gold>."
+host data_get_i64(4, "coins", 0) = 15
+host data_set_i64(4, "coins", 20) = 0
+host player_action_bar(4, "@payout", {amount="5", balance="20"}) = 0
+world action-bar Steve "<gray>+5 coins for playing. Balance: <gold>20</gold>."
+world task 1 fires at=18000
+callback token=4 ctx=37
+host config_i64("payout-amount", 5) = 5
+host players_online(cap=64) = 3 [2,3,4]
+host data_get_i64(2, "coins", 0) = 120
+host data_set_i64(2, "coins", 125) = 0
+host player_action_bar(2, "@payout", {amount="5", balance="125"}) = 0
+world action-bar Alex "<gray>+5 coins for playing. Balance: <gold>125</gold>."
+host data_get_i64(3, "coins", 0) = 120
+host data_set_i64(3, "coins", 125) = 0
+host player_action_bar(3, "@payout", {amount="5", balance="125"}) = 0
+world action-bar Bob "<gray>+5 coins for playing. Balance: <gold>125</gold>."
+host data_get_i64(4, "coins", 0) = 20
+host data_set_i64(4, "coins", 25) = 0
+host player_action_bar(4, "@payout", {amount="5", balance="25"}) = 0
+world action-bar Steve "<gray>+5 coins for playing. Balance: <gold>25</gold>."
+world task 1 fires at=19200
+callback token=4 ctx=38
+host config_i64("payout-amount", 5) = 5
+host players_online(cap=64) = 3 [2,3,4]
+host data_get_i64(2, "coins", 0) = 125
+host data_set_i64(2, "coins", 130) = 0
+host player_action_bar(2, "@payout", {amount="5", balance="130"}) = 0
+world action-bar Alex "<gray>+5 coins for playing. Balance: <gold>130</gold>."
+host data_get_i64(3, "coins", 0) = 125
+host data_set_i64(3, "coins", 130) = 0
+host player_action_bar(3, "@payout", {amount="5", balance="130"}) = 0
+world action-bar Bob "<gray>+5 coins for playing. Balance: <gold>130</gold>."
+host data_get_i64(4, "coins", 0) = 25
+host data_set_i64(4, "coins", 30) = 0
+host player_action_bar(4, "@payout", {amount="5", balance="30"}) = 0
+world action-bar Steve "<gray>+5 coins for playing. Balance: <gold>30</gold>."
+world task 1 fires at=20400
+callback token=4 ctx=39
+host config_i64("payout-amount", 5) = 5
+host players_online(cap=64) = 3 [2,3,4]
+host data_get_i64(2, "coins", 0) = 130
+host data_set_i64(2, "coins", 135) = 0
+host player_action_bar(2, "@payout", {amount="5", balance="135"}) = 0
+world action-bar Alex "<gray>+5 coins for playing. Balance: <gold>135</gold>."
+host data_get_i64(3, "coins", 0) = 130
+host data_set_i64(3, "coins", 135) = 0
+host player_action_bar(3, "@payout", {amount="5", balance="135"}) = 0
+world action-bar Bob "<gray>+5 coins for playing. Balance: <gold>135</gold>."
+host data_get_i64(4, "coins", 0) = 30
+host data_set_i64(4, "coins", 35) = 0
+host player_action_bar(4, "@payout", {amount="5", balance="35"}) = 0
+world action-bar Steve "<gray>+5 coins for playing. Balance: <gold>35</gold>."
+world task 1 fires at=21600
+callback token=4 ctx=40
+host config_i64("payout-amount", 5) = 5
+host players_online(cap=64) = 3 [2,3,4]
+host data_get_i64(2, "coins", 0) = 135
+host data_set_i64(2, "coins", 140) = 0
+host player_action_bar(2, "@payout", {amount="5", balance="140"}) = 0
+world action-bar Alex "<gray>+5 coins for playing. Balance: <gold>140</gold>."
+host data_get_i64(3, "coins", 0) = 135
+host data_set_i64(3, "coins", 140) = 0
+host player_action_bar(3, "@payout", {amount="5", balance="140"}) = 0
+world action-bar Bob "<gray>+5 coins for playing. Balance: <gold>140</gold>."
+host data_get_i64(4, "coins", 0) = 35
+host data_set_i64(4, "coins", 40) = 0
+host player_action_bar(4, "@payout", {amount="5", balance="40"}) = 0
+world action-bar Steve "<gray>+5 coins for playing. Balance: <gold>40</gold>."
+world task 1 fires at=22800
+callback token=4 ctx=41
+host config_i64("payout-amount", 5) = 5
+host players_online(cap=64) = 3 [2,3,4]
+host data_get_i64(2, "coins", 0) = 140
+host data_set_i64(2, "coins", 145) = 0
+host player_action_bar(2, "@payout", {amount="5", balance="145"}) = 0
+world action-bar Alex "<gray>+5 coins for playing. Balance: <gold>145</gold>."
+host data_get_i64(3, "coins", 0) = 140
+host data_set_i64(3, "coins", 145) = 0
+host player_action_bar(3, "@payout", {amount="5", balance="145"}) = 0
+world action-bar Bob "<gray>+5 coins for playing. Balance: <gold>145</gold>."
+host data_get_i64(4, "coins", 0) = 40
+host data_set_i64(4, "coins", 45) = 0
+host player_action_bar(4, "@payout", {amount="5", balance="45"}) = 0
+world action-bar Steve "<gray>+5 coins for playing. Balance: <gold>45</gold>."
+world task 1 fires at=24000
+callback token=4 ctx=42
+host config_i64("payout-amount", 5) = 5
+host players_online(cap=64) = 3 [2,3,4]
+host data_get_i64(2, "coins", 0) = 145
+host data_set_i64(2, "coins", 150) = 0
+host player_action_bar(2, "@payout", {amount="5", balance="150"}) = 0
+world action-bar Alex "<gray>+5 coins for playing. Balance: <gold>150</gold>."
+host data_get_i64(3, "coins", 0) = 145
+host data_set_i64(3, "coins", 150) = 0
+host player_action_bar(3, "@payout", {amount="5", balance="150"}) = 0
+world action-bar Bob "<gray>+5 coins for playing. Balance: <gold>150</gold>."
+host data_get_i64(4, "coins", 0) = 45
+host data_set_i64(4, "coins", 50) = 0
+host player_action_bar(4, "@payout", {amount="5", balance="50"}) = 0
+world action-bar Steve "<gray>+5 coins for playing. Balance: <gold>50</gold>."
+# click 1 15 Alex
+callback token=2 ctx=43
+host menu_click_player(43) = 2
+host config_i64("shop.fireworks-price", 150) = 150
+host data_get_i64(2, "coins", 0) = 150
+host data_set_i64(2, "coins", 0) = 0
+host translate("shop-item-fireworks", {}, cap=256) = 23 "<light_purple>Fireworks"
+host player_send(2, "@shop-bought", {item="<light_purple>Fireworks", price="150"}) = 0
+world send Alex "<green>Bought <light_purple>Fireworks for 150 coins."
+host player_sound(2, "minecraft:entity.firework_rocket.launch", 1, 1) = 0
+world sound Alex "minecraft:entity.firework_rocket.launch" volume=1 pitch=1
+# click 1 11 Alex
+callback token=1 ctx=44
+host menu_click_player(44) = 2
+host config_i64("shop.sparkles-price", 100) = 100
+host data_get_i64(2, "coins", 0) = 0
+host data_get_i64(2, "coins", 0) = 0
+host player_send(2, "@shop-cant-afford", {price="100", amount="0"}) = 0
+world send Alex "<red>You need 100 coins for that; you have 0."
+# command Alex coins
+callback token=6 ctx=45
+host command_arg_str(45, "target", cap=256) = -1
+host command_is_console(45) = 0
+host command_source_name(45, cap=256) = 4 "Alex"
+host player_by_name("Alex") = 2
+host data_get_i64(2, "coins", 0) = 0
+host command_reply(45, "@balance-self", {amount="0"}) = 0
+world reply Alex "<gray>You have <gold>0</gold> coins."
+# command Steve coins top 3
+callback token=7 ctx=46
+host command_arg_i64(46, "limit") = 0 out=3
+host store_top("coins", 3, cap=1024) = 48 ["Bob"=150, "Steve"=50, "Alex"=0]
+host command_reply(46, "@top-header", {}) = 0
+world reply Steve "<gold><bold>Top coins</bold>"
+host command_reply(46, "@top-row", {rank="1", name="Bob", amount="150"}) = 0
+world reply Steve "<gray>1. Bob <gold>150</gold>"
+host command_reply(46, "@top-row", {rank="2", name="Steve", amount="50"}) = 0
+world reply Steve "<gray>2. Steve <gold>50</gold>"
+host command_reply(46, "@top-row", {rank="3", name="Alex", amount="0"}) = 0
+world reply Steve "<gray>3. Alex <gold>0</gold>"
+# placeholder coins Alex
+callback token=5 ctx=47
+host placeholder_player(47) = 2
+host data_get_i64(2, "coins", 0) = 0
+host placeholder_result(47, "0") = 0
+world placeholder coins = "0"
+# disable
+world event plugin.disable listeners=0 cancelled=0
+world plugin-disabled requested

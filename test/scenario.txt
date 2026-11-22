@@ -1,0 +1,48 @@
+# Empty leaderboard, then first joins pay the welcome bonus
+enable
+command console coins top
+join Steve
+join Alex
+join Bob
+# Leaving and joining again says welcome back instead
+leave Steve
+join Steve
+# Balance rules: self, other, unknown player, console, bad usage
+command Steve coins
+command Steve coins Alex
+command Steve coins Nobody
+command console coins
+command console coins Steve
+command Steve coins Alex extra
+# Leaderboard limits
+command Steve coins top 3
+command Steve coins top 1
+command Steve coins top
+command Steve coins top 0
+command Steve coins top 26
+command Steve unknown
+# Placeholder with and without a player
+placeholder coins Steve
+placeholder coins none
+placeholder missing none
+# Shop: console refused, menu opens, 50 coins buys nothing
+command console shop
+command Steve shop
+click 1 11 Steve
+click 1 15 Steve
+click 1 13 Steve
+# First payout is one period after enable
+tick 1199
+tick 1
+# Ten payouts bring Steve and Alex to 100, enough for sparkles only
+tick 10800
+click 1 11 Steve
+click 1 15 Steve
+# Twenty payouts bring Alex to 150, enough for fireworks
+tick 12000
+click 1 15 Alex
+click 1 11 Alex
+command Alex coins
+command Steve coins top 3
+placeholder coins Alex
+disable

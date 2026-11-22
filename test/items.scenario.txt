@@ -1,0 +1,38 @@
+# Items area: give, take and count on a player inventory
+enable
+join Steve
+command Steve items give minecraft:bread 5
+command Steve items give diamond 64
+command Steve items give nothing_such 1
+command Steve items count minecraft:bread
+command Steve items take bread 2
+command Steve items count bread
+command Steve items slot 27
+command Steve items hand
+# Block, ender chest and cooldowns
+command Steve items chest
+command Steve items ender
+command Steve items cooldown minecraft:ender_pearl 40
+command Steve items cooldown minecraft:ender_pearl 0
+# Registry and enchantment values
+command Steve items registry item minecraft:bread
+command Steve items registry item minecraft:nothing_such
+command Steve items registry enchantments none
+command Steve items registry nothing none
+command Steve items level 3
+# Recipes, recipe book and stations
+command Steve items recipes
+command Steve items book
+command Steve items craft
+# Loot tables and trades
+command Steve items loot
+# Windows, merchants and container menus with click handlers
+command Steve items window
+command Steve items merchant
+command Steve items menu
+items-click 1 2 Steve
+items-click 1 4 Steve
+items-click 1 0 Steve
+command Steve items closemenu
+leave Steve
+command console items give bread 1

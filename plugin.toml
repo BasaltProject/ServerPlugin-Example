@@ -3,8 +3,22 @@ name = "Example"
 version = "1.0.0"
 authors = ["Whiron"]
 api = 1
-main = "src/main.lua"
+abi = 1
+lang = "cpp"
+main = "plugin.wasm"
 
 [capabilities]
-# Needed for `player.data.coins`: a balance per player, in players.db.
+# Needed for the coins balance: a value per player, in players.db.
 players_data = true
+# Needed for the server area: plugin storage, running commands, and the plugin's own files under data/ and notes/.
+storage = true
+commands = true
+files = ["data", "notes"]
+# The worlds tour creates, unloads and deletes a world and samples noise.
+worldgen = true
+# Plugin channel and raw packet listeners (the operator grants both in config/server.toml).
+packets = true
+network = ["example:chan"]
+
+[exports]
+services = ["example.echo"]

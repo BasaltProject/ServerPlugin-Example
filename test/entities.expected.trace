@@ -1,0 +1,190 @@
+# enable
+init
+host translate("shop-title", {}, cap=256) = 20 "<dark_gray>Coin Shop"
+host menu_create("<dark_gray>Coin Shop", 3) = 1
+host config_i64("shop.sparkles-price", 100) = 100
+host translate("shop-item-sparkles", {}, cap=256) = 14 "<aqua>Sparkles"
+host translate("shop-item-sparkles-lore", {price="100"}, cap=256) = 37 "<gray>100 coins, a burst of particles"
+host menu_set(1, 11, "minecraft:blaze_powder", "<aqua>Sparkles", "<gray>100 coins, a burst of particles", 1) = 0
+host config_i64("shop.fireworks-price", 150) = 150
+host translate("shop-item-fireworks", {}, cap=256) = 23 "<light_purple>Fireworks"
+host translate("shop-item-fireworks-lore", {price="150"}, cap=256) = 42 "<gray>150 coins, one firework at your feet"
+host menu_set(1, 15, "minecraft:firework_rocket", "<light_purple>Fireworks", "<gray>150 coins, one firework at your feet", 2) = 0
+host event_on("player.join", 2, 3) = 0
+host config_i64("payout-period", 1200) = 1200
+host task_every(1200, 1200, 4) = 1
+host placeholder_register("coins", 5) = 0
+host command_register("coins [target: word]", "", 6) = 0
+host command_register("coins top [limit: int 1..25]", "", 7) = 0
+host command_register("shop", "example.shop", 8) = 0
+host event_on_ex("player.chat", 2, 0, none, 9) = 0
+host event_on_ex("player.chat", 4, 3, none, 10) = 0
+host event_on_ex("player.join", 1, 0, {"world": "world"}, 11) = 0
+host event_on_ex("example:ping", 2, 0, none, 12) = 0
+host event_on_ex("no.such.event", 2, 0, none, 13) = -3
+host permission_provide(10, 3, 14) = 1
+host service_register("example.echo", 15) = 1
+host command_register("srv hello", "", 16) = 0
+host command_register("srv perms", "", 17) = 0
+host command_register("srv broadcast", "", 18) = 0
+host command_register("srv info", "", 19) = 0
+host command_register("srv admin", "", 20) = 0
+host command_register("srv files", "", 21) = 0
+host command_register("srv store", "", 22) = 0
+host command_register("srv service", "", 23) = 0
+host command_register("srv later", "", 24) = 0
+host command_register("srv manage", "", 25) = 0
+host command_register("srv unmanage", "", 26) = 0
+host command_register("worlds", "", 27) = 0
+host command_register("hud board", "", 28) = 0
+host command_register("hud bars", "", 29) = 0
+host command_register("hud holograms", "", 30) = 0
+host command_register("hud npcs", "", 31) = 0
+host command_register("hud npc-end", "", 32) = 0
+host command_register("hud tab", "", 33) = 0
+host command_register("hud surfaces", "", 34) = 0
+host command_register("hud surface-end", "", 35) = 0
+host command_register("items give <id: word> [count: int 1..64]", "", 36) = 0
+host command_register("items take <id: word> [count: int 1..64]", "", 37) = 0
+host command_register("items count <id: word>", "", 38) = 0
+host command_register("items slot <slot: int 0..40>", "", 39) = 0
+host command_register("items hand", "", 40) = 0
+host command_register("items chest", "", 41) = 0
+host command_register("items ender", "", 42) = 0
+host command_register("items cooldown <id: word> <ticks: int 0..1000>", "", 43) = 0
+host command_register("items registry <kind: word> <key: word>", "", 44) = 0
+host command_register("items level <level: int 1..10>", "", 45) = 0
+host command_register("items recipes", "", 46) = 0
+host command_register("items book", "", 47) = 0
+host command_register("items craft", "", 48) = 0
+host command_register("items menu", "", 49) = 0
+host command_register("items closemenu", "", 50) = 0
+host command_register("items window", "", 51) = 0
+host command_register("items merchant", "", 52) = 0
+host command_register("items loot", "", 53) = 0
+host command_register("entities tour", "", 54) = 0
+host command_register("entities bad", "", 55) = 0
+host event_on("plugin.enable", 2, 56) = 0
+host channel_listen("example:chan", 57) = 0
+host packet_listen("serverbound.chat_message", {"priority": "first"}, 58) = 1
+host packet_listen("clientbound.*", {"observe": true}, 59) = 2
+host packet_listen("serverbound.play.*", {"priority": "late", "observe": true}, 60) = 3
+host packet_listen("serverbound.chat_command", null, 61) = 4
+host packet_listen("nope", null, 62) = -3
+host command_register("pkt <action: word>", "", 63) = 0
+callback token=56 ctx=1
+host config_i64("payout-amount", 5) = 5
+host config_i64("payout-period", 1200) = 1200
+host log(1, "ready: 5 coins every 1200 ticks")
+world event plugin.enable listeners=1 cancelled=0
+# join Steve
+world join Steve handle=1
+callback token=3 ctx=2
+host event_player(2) = 1
+host player_name(1, cap=256) = 5 "Steve"
+host data_get_bool(1, "welcomed", 0) = 0
+host data_set_bool(1, "welcomed", 1) = 0
+host config_i64("welcome-bonus", 50) = 50
+host data_get_i64(1, "coins", 0) = 0
+host data_set_i64(1, "coins", 50) = 0
+host player_send(1, "@welcome", {name="Steve", amount="50"}) = 0
+world send Steve "<gold>Welcome, <yellow>Steve</yellow>! Here is <green>50</green> coins to get started."
+world event player.join listeners=1 cancelled=0
+# command Steve entities tour
+callback token=54 ctx=3
+host command_source_name(3, cap=256) = 5 "Steve"
+host player_by_name("Steve") = 1
+host entity_of_player(1) = 1
+host entity_player(1) = 1
+host entity_alive(1) = 1
+host entity_id(1) = 101
+host entity_position(1) = 0 [0, 0, 0]
+host entity_teleport(1, 10.5, 64, -3.5, {"yaw": 90, "pitch": 10}) = 0
+host entity_teleport(1, 1, 2, 3, {"world": "nowhere"}) = -1
+host entity_rotation(1) = 0 [90, 10]
+host entity_set_rotation(1, 45, 5) = 0
+host entity_get(1, "x", cap=256) = 9 10.5
+host entity_get(1, "nope", cap=256) = -1
+host entity_get(1, "uuid", cap=256) = 38 "00000000-0000-4000-8000-000000000101"
+host entity_properties(1, cap=1024) = 396 [{"name": "id", "writable": false}, {"name": "type", "writable": false}, {"name": "world", "writable": false}, {"name": "uuid", "writable": false}, {"name": "alive", "writable": false}, {"name": "x", "writable": false}, {"name": "y", "writable": false}, {"name": "z", "writable": false}, {"name": "yaw", "writable": true}, {"name": "pitch", "writable": true}, {"name": "health", "writable": false}, {"name": "on_ground", "writable": false}, {"name": "age", "writable": false}, {"name": "width", "writable": false}, {"name": "height", "writable": false}, {"name": "pos", "writable": false}, {"name": "velocity", "writable": true}]
+host entity_operations(1, cap=1024) = 341 [{"name": "add_effect", "columns": []}, {"name": "add_goal", "columns": []}, {"name": "attribute", "columns": []}, {"name": "damage", "columns": []}, {"name": "effects", "columns": ["effect", "duration", "amplifier", "ambient", "particles", "icon"]}, {"name": "find_path", "columns": []}, {"name": "goals", "columns": ["key", "priority", "running", "plugin", "usable", "flags"]}, {"name": "has_goal", "columns": []}, {"name": "kill", "columns": []}]
+host entity_types(cap=2048) = 51 ["minecraft:pig", "minecraft:zombie", "minecraft:item"]
+host entity_type_attributes("minecraft:pig", cap=512) = 66 {"minecraft:max_health": 20, "minecraft:movement_speed": 0.25}
+host entity_type_attributes("minecraft:nothing", cap=512) = -3
+host entity_spawn("world", "minecraft:pig", 1, 64, 2, {"yaw": 90}) = 2
+host entity_spawn("world", "minecraft:nothing", 0, 0, 0, none) = -3
+host entity_spawn("world", "minecraft:zombie", 3, 64, 2, none) = 3
+host entity_spawn("world", "minecraft:pig", 0, 0, 0, {"reason": "veto"}) = -1
+host entity_spawn("nowhere", "minecraft:pig", 0, 0, 0, none) = -3
+host entity_id(2) = 1
+host entity_by_id("world", 1) = 2
+host entity_by_id("world", 9999) = -1
+host entity_by_uuid("00000000-0000-4000-8000-000000000001") = 2
+host entity_by_uuid("not-a-uuid") = -3
+host entity_query("world", {"type": "minecraft:pig"}, cap=8) = 1 [2]
+host entity_query("world", {"x": 1, "y": 64, "z": 2, "radius": 5, "limit": 10}, cap=8) = 2 [2, 3]
+host entity_set_velocity(2, 0, 0.5, 0) = 0
+host entity_velocity(2) = 0 [0, 0.5, 0]
+host entity_velocity(1) = -3
+host entity_set(2, "glowing", true) = 0
+host entity_get(2, "glowing", cap=64) = 1 true
+host entity_set(2, "vehicle", 1) = -3
+host entity_set(2, "nope", true) = -1
+host entity_call(2, "damage", [3], cap=64) = 1 true
+host entity_call(2, "add_effect", ["minecraft:speed", 200, 1], cap=64) = 1 true
+host entity_call(2, "effects", [], cap=512) = 78 [{"effect": "minecraft:speed", "duration": 200, "amplifier": 1, "ambient": false, "particles": true, "icon": true}]
+host entity_call(2, "add_goal", ["example:wander", 3, "MOVE"], cap=64) = 1 true
+host entity_call(2, "has_goal", ["example:wander"], cap=64) = 1 true
+host entity_call(2, "goals", [], cap=512) = 72 [{"key": "example:wander", "priority": 3, "running": false, "plugin": true, "usable": true, "flags": "MOVE"}]
+host entity_call(2, "find_path", [5, 64, 5], cap=512) = 9 [5, 64, 5]
+host entity_call(2, "bogus", [], cap=64) = -1
+host entity_snapshot(2, cap=4096) = 17 "nbt:minecraft:pig"
+host entity_restore(2, "nbt:minecraft:pig") = 0
+host entity_spawn_nbt("world", nbt[17], "command") = 4
+host entity_drop_item("world", {"id": "minecraft:diamond", "count": 2}, 1, 65, 2, 0, 0.2, 0) = 5
+host entity_drop_item("world", {"count": 1}, 1, 65, 2, 0, 0, 0) = -3
+host entity_spawn_rules("world", {"limits": {"monster": 20}, "allow_animals": false}, cap=512) = 64 {"limits": {"monster": 20}, "ticks_per": {}, "allow_monsters": true, "allow_animals": false}
+host entity_spawn_rules("world", {"limits": {"monster": -1}, "allow_animals": true}, cap=512) = 54 {"limits": {}, "ticks_per": {}, "allow_monsters": true, "allow_animals": true}
+host entity_mechanic("combat.fall_damage", {"distance": 10}, cap=64) = 2 7
+host entity_mechanic("physics.projectile_margin", {"tick_count": 10}, cap=64) = 9 0.15
+host entity_mechanic("nope", {}, cap=64) = -1
+host entity_remove(2) = 0
+host entity_alive(2) = 0
+host entity_position(2) = -2
+host entity_remove(2) = -2
+host entity_remove_uuid("world", "00000000-0000-4000-8000-0000000000ff") = -1
+host entity_remove_uuid("world", "nope") = -3
+host entity_remove(3) = 0
+host entity_remove(4) = 0
+host entity_remove(5) = 0
+host entity_release(1) = 0
+host entity_release(1) = -2
+host command_reply(3, "tour done", {}) = 0
+world reply Steve "tour done"
+# command Steve entities bad
+callback token=55 ctx=4
+host entity_alive(999) = -3
+host entity_id(0) = -3
+host entity_player(-5) = -3
+host entity_by_uuid("") = -3
+host entity_event_entity(4) = -3
+host entity_ai_answer(4, 1) = -3
+host entity_position(7) = -3
+host entity_mechanic("", {}, cap=16) = -1
+host command_reply(4, "bad done", {}) = 0
+world reply Steve "bad done"
+# command console entities bad
+callback token=55 ctx=5
+host entity_alive(999) = -3
+host entity_id(0) = -3
+host entity_player(-5) = -3
+host entity_by_uuid("") = -3
+host entity_event_entity(5) = -3
+host entity_ai_answer(5, 1) = -3
+host entity_position(7) = -3
+host entity_mechanic("", {}, cap=16) = -1
+host command_reply(5, "bad done", {}) = 0
+world reply CONSOLE "bad done"
+# disable
+world event plugin.disable listeners=0 cancelled=0
+world plugin-disabled requested

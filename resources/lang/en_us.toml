@@ -18,3 +18,6 @@ shop-item-fireworks-lore = "<gray>{price} coins, one firework at your feet"
 shop-bought = "<green>Bought {item} for {price} coins."
 shop-cant-afford = "<red>You need {price} coins for that; you have {amount}."
 shop-players-only = "<red>The shop needs a player, not the console."
+
+server-line = "<gray>{text}"
+items-line = "<gray>{text}"

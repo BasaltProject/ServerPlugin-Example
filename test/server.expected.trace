@@ -1,0 +1,412 @@
+# enable
+init
+host translate("shop-title", {}, cap=256) = 20 "<dark_gray>Coin Shop"
+host menu_create("<dark_gray>Coin Shop", 3) = 1
+host config_i64("shop.sparkles-price", 100) = 100
+host translate("shop-item-sparkles", {}, cap=256) = 14 "<aqua>Sparkles"
+host translate("shop-item-sparkles-lore", {price="100"}, cap=256) = 37 "<gray>100 coins, a burst of particles"
+host menu_set(1, 11, "minecraft:blaze_powder", "<aqua>Sparkles", "<gray>100 coins, a burst of particles", 1) = 0
+host config_i64("shop.fireworks-price", 150) = 150
+host translate("shop-item-fireworks", {}, cap=256) = 23 "<light_purple>Fireworks"
+host translate("shop-item-fireworks-lore", {price="150"}, cap=256) = 42 "<gray>150 coins, one firework at your feet"
+host menu_set(1, 15, "minecraft:firework_rocket", "<light_purple>Fireworks", "<gray>150 coins, one firework at your feet", 2) = 0
+host event_on("player.join", 2, 3) = 0
+host config_i64("payout-period", 1200) = 1200
+host task_every(1200, 1200, 4) = 1
+host placeholder_register("coins", 5) = 0
+host command_register("coins [target: word]", "", 6) = 0
+host command_register("coins top [limit: int 1..25]", "", 7) = 0
+host command_register("shop", "example.shop", 8) = 0
+host event_on_ex("player.chat", 2, 0, none, 9) = 0
+host event_on_ex("player.chat", 4, 3, none, 10) = 0
+host event_on_ex("player.join", 1, 0, {"world": "world"}, 11) = 0
+host event_on_ex("example:ping", 2, 0, none, 12) = 0
+host event_on_ex("no.such.event", 2, 0, none, 13) = -3
+host permission_provide(10, 3, 14) = 1
+host service_register("example.echo", 15) = 1
+host command_register("srv hello", "", 16) = 0
+host command_register("srv perms", "", 17) = 0
+host command_register("srv broadcast", "", 18) = 0
+host command_register("srv info", "", 19) = 0
+host command_register("srv admin", "", 20) = 0
+host command_register("srv files", "", 21) = 0
+host command_register("srv store", "", 22) = 0
+host command_register("srv service", "", 23) = 0
+host command_register("srv later", "", 24) = 0
+host command_register("srv manage", "", 25) = 0
+host command_register("srv unmanage", "", 26) = 0
+host command_register("worlds", "", 27) = 0
+host command_register("hud board", "", 28) = 0
+host command_register("hud bars", "", 29) = 0
+host command_register("hud holograms", "", 30) = 0
+host command_register("hud npcs", "", 31) = 0
+host command_register("hud npc-end", "", 32) = 0
+host command_register("hud tab", "", 33) = 0
+host command_register("hud surfaces", "", 34) = 0
+host command_register("hud surface-end", "", 35) = 0
+host command_register("items give <id: word> [count: int 1..64]", "", 36) = 0
+host command_register("items take <id: word> [count: int 1..64]", "", 37) = 0
+host command_register("items count <id: word>", "", 38) = 0
+host command_register("items slot <slot: int 0..40>", "", 39) = 0
+host command_register("items hand", "", 40) = 0
+host command_register("items chest", "", 41) = 0
+host command_register("items ender", "", 42) = 0
+host command_register("items cooldown <id: word> <ticks: int 0..1000>", "", 43) = 0
+host command_register("items registry <kind: word> <key: word>", "", 44) = 0
+host command_register("items level <level: int 1..10>", "", 45) = 0
+host command_register("items recipes", "", 46) = 0
+host command_register("items book", "", 47) = 0
+host command_register("items craft", "", 48) = 0
+host command_register("items menu", "", 49) = 0
+host command_register("items closemenu", "", 50) = 0
+host command_register("items window", "", 51) = 0
+host command_register("items merchant", "", 52) = 0
+host command_register("items loot", "", 53) = 0
+host command_register("entities tour", "", 54) = 0
+host command_register("entities bad", "", 55) = 0
+host event_on("plugin.enable", 2, 56) = 0
+host channel_listen("example:chan", 57) = 0
+host packet_listen("serverbound.chat_message", {"priority": "first"}, 58) = 1
+host packet_listen("clientbound.*", {"observe": true}, 59) = 2
+host packet_listen("serverbound.play.*", {"priority": "late", "observe": true}, 60) = 3
+host packet_listen("serverbound.chat_command", null, 61) = 4
+host packet_listen("nope", null, 62) = -3
+host command_register("pkt <action: word>", "", 63) = 0
+callback token=56 ctx=1
+host config_i64("payout-amount", 5) = 5
+host config_i64("payout-period", 1200) = 1200
+host log(1, "ready: 5 coins every 1200 ticks")
+world event plugin.enable listeners=1 cancelled=0
+# join Steve
+world join Steve handle=1
+callback token=3 ctx=2
+host event_player(2) = 1
+host player_name(1, cap=256) = 5 "Steve"
+host data_get_bool(1, "welcomed", 0) = 0
+host data_set_bool(1, "welcomed", 1) = 0
+host config_i64("welcome-bonus", 50) = 50
+host data_get_i64(1, "coins", 0) = 0
+host data_set_i64(1, "coins", 50) = 0
+host player_send(1, "@welcome", {name="Steve", amount="50"}) = 0
+world send Steve "<gold>Welcome, <yellow>Steve</yellow>! Here is <green>50</green> coins to get started."
+world event player.join listeners=1 cancelled=0
+# join Alex
+world join Alex handle=2
+callback token=3 ctx=3
+host event_player(3) = 2
+host player_name(2, cap=256) = 4 "Alex"
+host data_get_bool(2, "welcomed", 0) = 0
+host data_set_bool(2, "welcomed", 1) = 0
+host config_i64("welcome-bonus", 50) = 50
+host data_get_i64(2, "coins", 0) = 0
+host data_set_i64(2, "coins", 50) = 0
+host player_send(2, "@welcome", {name="Alex", amount="50"}) = 0
+world send Alex "<gold>Welcome, <yellow>Alex</yellow>! Here is <green>50</green> coins to get started."
+world event player.join listeners=1 cancelled=0
+# command Steve srv perms
+callback token=17 ctx=4
+host command_source_name(4, cap=256) = 5 "Steve"
+host player_by_name("Steve") = 1
+host permission_has(1, "example.vip") = 0
+host command_reply(4, "@server-line", {text="has example.vip 0"}) = 0
+world reply Steve "<gray>has example.vip 0"
+host permission_check("console", "example.vip") = 1
+host command_reply(4, "@server-line", {text="console has example.vip 1"}) = 0
+world reply Steve "<gray>console has example.vip 1"
+host permission_set(1, "example.vip", 1) = 0
+world permission Steve "example.vip" granted
+world command-tree Steve
+host command_reply(4, "@server-line", {text="grant 0"}) = 0
+world reply Steve "<gray>grant 0"
+host permission_has(1, "example.vip") = 1
+host command_reply(4, "@server-line", {text="has example.vip 1"}) = 0
+world reply Steve "<gray>has example.vip 1"
+host permission_set(1, "example.vip", -1) = 0
+world permission Steve "example.vip" dropped
+world command-tree Steve
+host command_reply(4, "@server-line", {text="drop 0"}) = 0
+world reply Steve "<gray>drop 0"
+host permission_has(1, "example.vip") = 0
+host command_reply(4, "@server-line", {text="has example.vip 0"}) = 0
+world reply Steve "<gray>has example.vip 0"
+host permission_meta("Steve", "prefix", cap=128) = 8 "[Member]"
+host command_reply(4, "@server-line", {text="[Member]"}) = 0
+world reply Steve "<gray>[Member]"
+host permission_check("Nobody", "example.vip") = -1
+host command_reply(4, "@server-line", {text="unknown subject -1"}) = 0
+world reply Steve "<gray>unknown subject -1"
+# ask Steve example.vip
+callback token=14 ctx=5
+host value_result(5, cap=1024) = 109 {"kind": "check", "name": "Steve", "uuid": "00000000-0000-0000-0000-000000000001", "console": false, "node": "example.vip", "world": "world"}
+host value_result(5, cap=1024) = 109 {"kind": "check", "name": "Steve", "uuid": "00000000-0000-0000-0000-000000000001", "console": false, "node": "example.vip", "world": "world"}
+host permission_answer(5, 1) = 0
+world ask Steve "example.vip" = granted
+# askmeta Steve prefix
+callback token=14 ctx=6
+host value_result(6, cap=1024) = 103 {"kind": "meta", "name": "Steve", "uuid": "00000000-0000-0000-0000-000000000001", "console": false, "node": "prefix", "world": "world"}
+host value_result(6, cap=1024) = 103 {"kind": "meta", "name": "Steve", "uuid": "00000000-0000-0000-0000-000000000001", "console": false, "node": "prefix", "world": "world"}
+host permission_answer_meta(6, "VIP") = 0
+world askmeta Steve "prefix" = "VIP"
+# ask console example.vip
+callback token=14 ctx=7
+host value_result(7, cap=1024) = 70 {"kind": "check", "name": "CONSOLE", "uuid": "", "console": true, "node": "example.vip", "world": ""}
+host value_result(7, cap=1024) = 70 {"kind": "check", "name": "CONSOLE", "uuid": "", "console": true, "node": "example.vip", "world": ""}
+host permission_answer(7, 1) = 0
+world ask console "example.vip" = granted
+# command Steve srv broadcast
+callback token=18 ctx=8
+host server_broadcast("@server-line", {text="hello everyone"}, 3) = 2
+world broadcast Steve "<gray>hello everyone"
+world broadcast Alex "<gray>hello everyone"
+world console "<gray>hello everyone"
+host command_reply(8, "@server-line", {text="reached 2"}) = 0
+world reply Steve "<gray>reached 2"
+host server_broadcast("plain text", {}, 2) = 0
+world console "plain text"
+host command_reply(8, "@server-line", {text="console only 0"}) = 0
+world reply Steve "<gray>console only 0"
+host server_broadcast("x", {}, 0) = -3
+host command_reply(8, "@server-line", {text="nobody -3"}) = 0
+world reply Steve "<gray>nobody -3"
+host command_source_name(8, cap=256) = 5 "Steve"
+host player_by_name("Steve") = 1
+host placeholder_fill("%player_name% is here", 1, cap=256) = 13 "Steve is here"
+host command_reply(8, "@server-line", {text="Steve is here"}) = 0
+world reply Steve "<gray>Steve is here"
+# command Steve srv info
+callback token=19 ctx=9
+host server_info(cap=1024) = 361 {"software": "Basalt", "version": "trace", "minecraft": "26.3", "protocol": 777, "tps_1m": 20, "tps_5m": 20, "tps_15m": 20, "mean_tick_ms": 1.5, "tick_rate": 20, "frozen": false, "paused": false, "online": 2, "max_players": 20, "plugins": [{"id": "example", "name": "Example", "version": "1.0.0", "disabled": false}], "plugin": {"id": "example", "name": "Example", "version": "1.0.0", "authors": ["Whiron"], "lane": 0, "lanes": 1, "folder": "plugins/example"}}
+host command_reply(9, "@server-line", {text="info 0"}) = 0
+world reply Steve "<gray>info 0"
+host command_reply(9, "@server-line", {text="online 2"}) = 0
+world reply Steve "<gray>online 2"
+host command_reply(9, "@server-line", {text="software 6"}) = 0
+world reply Steve "<gray>software 6"
+host command_reply(9, "@server-line", {text="plugins 1"}) = 0
+world reply Steve "<gray>plugins 1"
+host command_reply(9, "@server-line", {text="lane 0"}) = 0
+world reply Steve "<gray>lane 0"
+# command Steve srv admin
+callback token=20 ctx=10
+host server_call("settings.get", {"key": "motd"}, cap=1024) = 17 "A Basalt server"
+host command_reply(10, "@server-line", {text="settings.get 0"}) = 0
+world reply Steve "<gray>settings.get 0"
+host command_reply(10, "@server-line", {text="motd length 15"}) = 0
+world reply Steve "<gray>motd length 15"
+host server_call("tick.rate", null, cap=1024) = 9 20
+host command_reply(10, "@server-line", {text="tick.rate 0"}) = 0
+world reply Steve "<gray>tick.rate 0"
+host command_reply(10, "@server-line", {text="rate 20"}) = 0
+world reply Steve "<gray>rate 20"
+host server_call("ops", null, cap=1024) = 651 ["access.is_banned", "access.is_operator", "access.is_whitelisted", "access.known", "access.last_death", "access.set_statistic", "access.statistic", "datapacks.function_tags", "datapacks.functions", "datapacks.list", "datapacks.refresh", "datapacks.resource", "datapacks.resource_pack", "datapacks.resources", "datapacks.schedule", "datapacks.scheduled", "datapacks.unschedule", "links.list", "links.set", "settings.get", "settings.keys", "settings.set", "stopwatches.create", "stopwatches.elapsed", "stopwatches.list", "stopwatches.remove", "stopwatches.restart", "tick.frozen", "tick.pace", "tick.paused", "tick.rate", "tick.set_frozen", "tick.set_rate", "tick.sprint", "tick.step", "tick.stop_sprint", "tick.times", "ops"]
+host command_reply(10, "@server-line", {text="ops 0"}) = 0
+world reply Steve "<gray>ops 0"
+host command_reply(10, "@server-line", {text="op count 38"}) = 0
+world reply Steve "<gray>op count 38"
+host server_call("nope.nope", null, cap=1024) = -3
+host command_reply(10, "@server-line", {text="unknown op -3"}) = 0
+world reply Steve "<gray>unknown op -3"
+host server_call("datapacks.list", null, cap=1024) = -4
+host command_reply(10, "@server-line", {text="datapacks -4"}) = 0
+world reply Steve "<gray>datapacks -4"
+# command Steve srv files
+callback token=21 ctx=11
+host files_write("notes/a.txt", "hello") = 0
+host command_reply(11, "@server-line", {text="write 0"}) = 0
+world reply Steve "<gray>write 0"
+host files_exists("notes/a.txt") = 1
+host command_reply(11, "@server-line", {text="exists 1"}) = 0
+world reply Steve "<gray>exists 1"
+host files_read("notes/a.txt", cap=63) = 5 "hello"
+host command_reply(11, "@server-line", {text="hello"}) = 0
+world reply Steve "<gray>hello"
+host files_list("notes", cap=1024) = 15 ["notes/a.txt"]
+host command_reply(11, "@server-line", {text="list 0"}) = 0
+world reply Steve "<gray>list 0"
+host command_reply(11, "@server-line", {text="entries 1"}) = 0
+world reply Steve "<gray>entries 1"
+host files_stat("notes/a.txt", cap=1024) = 36 {"kind": "file", "size": 5, "modified": 1700000000000}
+host command_reply(11, "@server-line", {text="stat 0"}) = 0
+world reply Steve "<gray>stat 0"
+host command_reply(11, "@server-line", {text="size 5"}) = 0
+world reply Steve "<gray>size 5"
+host files_write("secret/a.txt", "x") = -4
+host command_reply(11, "@server-line", {text="outside -4"}) = 0
+world reply Steve "<gray>outside -4"
+host files_write("notes/../a.txt", "x") = -3
+host command_reply(11, "@server-line", {text="escape -3"}) = 0
+world reply Steve "<gray>escape -3"
+host files_read("data/readme.txt", cap=32) = 15 "packaged readme"
+host command_reply(11, "@server-line", {text="packaged 15"}) = 0
+world reply Steve "<gray>packaged 15"
+host files_delete("notes/a.txt", 0) = 0
+host command_reply(11, "@server-line", {text="delete 0"}) = 0
+world reply Steve "<gray>delete 0"
+host files_exists("notes/a.txt") = 0
+host command_reply(11, "@server-line", {text="gone 0"}) = 0
+world reply Steve "<gray>gone 0"
+# command Steve srv store
+callback token=22 ctx=12
+host store_set("visits", 3) = 0
+host command_reply(12, "@server-line", {text="set 0"}) = 0
+world reply Steve "<gray>set 0"
+host store_get("visits", cap=1024) = 2 3
+host command_reply(12, "@server-line", {text="get 0"}) = 0
+world reply Steve "<gray>get 0"
+host command_reply(12, "@server-line", {text="visits 3"}) = 0
+world reply Steve "<gray>visits 3"
+host store_get("nothing", cap=1024) = -1
+host command_reply(12, "@server-line", {text="missing -1"}) = 0
+world reply Steve "<gray>missing -1"
+host data_write("stats", {"kills": 7, "tags": ["a", "b"]}) = 0
+host command_reply(12, "@server-line", {text="write 0"}) = 0
+world reply Steve "<gray>write 0"
+host data_read("stats", cap=1024) = 23 {"kills": 7, "tags": ["a", "b"]}
+host command_reply(12, "@server-line", {text="read 0"}) = 0
+world reply Steve "<gray>read 0"
+host command_reply(12, "@server-line", {text="kills 7"}) = 0
+world reply Steve "<gray>kills 7"
+host command_reply(12, "@server-line", {text="tags 2"}) = 0
+world reply Steve "<gray>tags 2"
+host config_value("shop", cap=1024) = 39 {"sparkles-price": 100, "fireworks-price": 150}
+host command_reply(12, "@server-line", {text="config 0"}) = 0
+world reply Steve "<gray>config 0"
+host command_reply(12, "@server-line", {text="price 100"}) = 0
+world reply Steve "<gray>price 100"
+host config_value("payout_period", cap=1024) = 3 1200
+host command_reply(12, "@server-line", {text="dashed 0"}) = 0
+world reply Steve "<gray>dashed 0"
+# command Steve srv service
+callback token=23 ctx=13
+host service_has("example.echo") = 1
+host command_reply(13, "@server-line", {text="has 1"}) = 0
+world reply Steve "<gray>has 1"
+host service_has("example.other") = 0
+host command_reply(13, "@server-line", {text="has other 0"}) = 0
+world reply Steve "<gray>has other 0"
+host service_call("example.echo", {"n": 21}, 0, 64) = 1
+host command_reply(13, "@server-line", {text="call 1"}) = 0
+world reply Steve "<gray>call 1"
+host service_call("example.other", {"n": 21}, 0, 65) = -1
+host command_reply(13, "@server-line", {text="absent -1"}) = 0
+world reply Steve "<gray>absent -1"
+callback token=15 ctx=14
+host value_result(14, cap=1024) = 48 {"name": "example.echo", "caller": "example", "args": {"n": 21}}
+host service_reply(14, {"echo": 42}) = 0
+callback token=64 ctx=15
+host value_result(15, cap=1024) = 21 {"ok": true, "value": {"echo": 42}}
+host log(1, "ok 1")
+host log(1, "echo 42")
+# tick 1
+# command Steve srv later
+callback token=24 ctx=16
+host task_wait(20, 66) = 2
+host command_reply(16, "@server-line", {text="wait 1"}) = 0
+world reply Steve "<gray>wait 1"
+host task_at("world", 0, 0, 67) = 3
+host command_reply(16, "@server-line", {text="at 1"}) = 0
+world reply Steve "<gray>at 1"
+host task_at("elsewhere", 0, 0, 68) = -1
+host command_reply(16, "@server-line", {text="at unknown -1"}) = 0
+world reply Steve "<gray>at unknown -1"
+host profile_lookup("Notch", 69) = 4
+host command_reply(16, "@server-line", {text="lookup 1"}) = 0
+world reply Steve "<gray>lookup 1"
+callback token=67 ctx=17
+host log(1, "placed 1")
+world profile-lookup finished
+callback token=69 ctx=18
+host value_result(18, cap=1024) = 95 {"uuid": "069a79f4-44e9-4726-a5be-fca90e38aaf5", "name": "Notch", "texture": "dGV4dHVyZXM=", "signature": "c2ln"}
+host log(1, "profile 36")
+# tick 20
+callback token=66 ctx=19
+host log(1, "waited 2")
+# command Steve srv manage
+callback token=25 ctx=20
+host command_register_ex("dyn [amount: float] [loud: bool]", "", 70, 71) = 0
+host command_reply(20, "@server-line", {text="register 0"}) = 0
+world reply Steve "<gray>register 0"
+host command_register_ex("dyn [amount: float] [loud: bool]", "", 72, -1) = -3
+host command_reply(20, "@server-line", {text="again -3"}) = 0
+world reply Steve "<gray>again -3"
+host command_alias("dyn", "dy") = 0
+host command_reply(20, "@server-line", {text="alias 0"}) = 0
+world reply Steve "<gray>alias 0"
+host command_alias("nothing", "no") = -1
+host command_reply(20, "@server-line", {text="alias missing -1"}) = 0
+world reply Steve "<gray>alias missing -1"
+host command_run("srv hello", 0) = 1
+world run console "srv hello"
+host command_reply(20, "@server-line", {text="run 1"}) = 0
+world reply Steve "<gray>run 1"
+host command_source_name(20, cap=256) = 5 "Steve"
+host player_by_name("Steve") = 1
+host command_run("srv hello", 1) = 1
+world run Steve "srv hello"
+host command_reply(20, "@server-line", {text="run as player 1"}) = 0
+world reply Steve "<gray>run as player 1"
+# command Steve dyn 1.5 true
+callback token=70 ctx=21
+host command_reply(21, "@server-line", {text="dynamic ran"}) = 0
+world reply Steve "<gray>dynamic ran"
+host command_arg_f64(21, "amount") = 0 out=1.5
+host command_arg_bool(21, "loud") = 0 out=1
+host command_reply(21, "@server-line", {text="amount 15"}) = 0
+world reply Steve "<gray>amount 15"
+host command_reply(21, "@server-line", {text="loud 1"}) = 0
+world reply Steve "<gray>loud 1"
+# command Steve dy
+callback token=70 ctx=22
+host command_reply(22, "@server-line", {text="dynamic ran"}) = 0
+world reply Steve "<gray>dynamic ran"
+host command_arg_f64(22, "amount") = -1
+host command_arg_bool(22, "loud") = -1
+host command_reply(22, "@server-line", {text="amount 0"}) = 0
+world reply Steve "<gray>amount 0"
+host command_reply(22, "@server-line", {text="loud 0"}) = 0
+world reply Steve "<gray>loud 0"
+# complete Steve dyn al
+callback token=71 ctx=23
+host command_complete_add(23, "alpha") = 0
+host command_complete_add(23, "beta") = 0
+host command_complete_input(23, cap=256) = 2 "al"
+host command_complete_add(23, "al") = 0
+world complete "dyn al" = ["alpha", "beta", "al"]
+# complete Steve dyn
+callback token=71 ctx=24
+host command_complete_add(24, "alpha") = 0
+host command_complete_add(24, "beta") = 0
+host command_complete_input(24, cap=256) = 0 ""
+world complete "dyn" = ["alpha", "beta"]
+# command Steve srv unmanage
+callback token=26 ctx=25
+host command_unregister("dyn") = 2
+host command_reply(25, "@server-line", {text="unregister 2"}) = 0
+world reply Steve "<gray>unregister 2"
+host command_unregister("dyn") = -1
+host command_reply(25, "@server-line", {text="unregister again -1"}) = 0
+world reply Steve "<gray>unregister again -1"
+# command Steve dyn
+world unknown-command "dyn"
+# leave Alex
+world event player.leave listeners=0 cancelled=0
+world leave Alex
+# command console srv broadcast
+callback token=18 ctx=26
+host server_broadcast("@server-line", {text="hello everyone"}, 3) = 1
+world broadcast Steve "<gray>hello everyone"
+world console "<gray>hello everyone"
+host command_reply(26, "@server-line", {text="reached 1"}) = 0
+world reply CONSOLE "<gray>reached 1"
+host server_broadcast("plain text", {}, 2) = 0
+world console "plain text"
+host command_reply(26, "@server-line", {text="console only 0"}) = 0
+world reply CONSOLE "<gray>console only 0"
+host server_broadcast("x", {}, 0) = -3
+host command_reply(26, "@server-line", {text="nobody -3"}) = 0
+world reply CONSOLE "<gray>nobody -3"
+host command_source_name(26, cap=256) = 7 "CONSOLE"
+host player_by_name("CONSOLE") = 0
+host placeholder_fill("%player_name% is here", 0, cap=256) = 21 "%player_name% is here"
+host command_reply(26, "@server-line", {text="%player_name% is here"}) = 0
+world reply CONSOLE "<gray>%player_name% is here"

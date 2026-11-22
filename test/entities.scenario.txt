@@ -1,0 +1,8 @@
+# Handles, spawning, motion, properties and operations by name, saved form, rules and formulas
+enable
+join Steve
+command Steve entities tour
+# Error paths and the goal events outside a goal
+command Steve entities bad
+command console entities bad
+disable
