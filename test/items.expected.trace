@@ -1,0 +1,492 @@
+# enable
+init
+host translate("shop-title", {}, cap=256) = 20 "<dark_gray>Coin Shop"
+host menu_create("<dark_gray>Coin Shop", 3) = 1
+host config_i64("shop.sparkles-price", 100) = 100
+host translate("shop-item-sparkles", {}, cap=256) = 14 "<aqua>Sparkles"
+host translate("shop-item-sparkles-lore", {price="100"}, cap=256) = 37 "<gray>100 coins, a burst of particles"
+host menu_set(1, 11, "minecraft:blaze_powder", "<aqua>Sparkles", "<gray>100 coins, a burst of particles", 1) = 0
+host config_i64("shop.fireworks-price", 150) = 150
+host translate("shop-item-fireworks", {}, cap=256) = 23 "<light_purple>Fireworks"
+host translate("shop-item-fireworks-lore", {price="150"}, cap=256) = 42 "<gray>150 coins, one firework at your feet"
+host menu_set(1, 15, "minecraft:firework_rocket", "<light_purple>Fireworks", "<gray>150 coins, one firework at your feet", 2) = 0
+host event_on("player.join", 2, 3) = 0
+host config_i64("payout-period", 1200) = 1200
+host task_every(1200, 1200, 4) = 1
+host placeholder_register("coins", 5) = 0
+host command_register("coins [target: word]", "", 6) = 0
+host command_register("coins top [limit: int 1..25]", "", 7) = 0
+host command_register("shop", "example.shop", 8) = 0
+host event_on_ex("player.chat", 2, 0, none, 9) = 0
+host event_on_ex("player.chat", 4, 3, none, 10) = 0
+host event_on_ex("player.join", 1, 0, {"world": "world"}, 11) = 0
+host event_on_ex("example:ping", 2, 0, none, 12) = 0
+host event_on_ex("no.such.event", 2, 0, none, 13) = -3
+host permission_provide(10, 3, 14) = 1
+host service_register("example.echo", 15) = 1
+host command_register("srv hello", "", 16) = 0
+host command_register("srv perms", "", 17) = 0
+host command_register("srv broadcast", "", 18) = 0
+host command_register("srv info", "", 19) = 0
+host command_register("srv admin", "", 20) = 0
+host command_register("srv files", "", 21) = 0
+host command_register("srv store", "", 22) = 0
+host command_register("srv service", "", 23) = 0
+host command_register("srv later", "", 24) = 0
+host command_register("srv manage", "", 25) = 0
+host command_register("srv unmanage", "", 26) = 0
+host command_register("worlds", "", 27) = 0
+host command_register("hud board", "", 28) = 0
+host command_register("hud bars", "", 29) = 0
+host command_register("hud holograms", "", 30) = 0
+host command_register("hud npcs", "", 31) = 0
+host command_register("hud npc-end", "", 32) = 0
+host command_register("hud tab", "", 33) = 0
+host command_register("hud surfaces", "", 34) = 0
+host command_register("hud surface-end", "", 35) = 0
+host command_register("items give <id: word> [count: int 1..64]", "", 36) = 0
+host command_register("items take <id: word> [count: int 1..64]", "", 37) = 0
+host command_register("items count <id: word>", "", 38) = 0
+host command_register("items slot <slot: int 0..40>", "", 39) = 0
+host command_register("items hand", "", 40) = 0
+host command_register("items chest", "", 41) = 0
+host command_register("items ender", "", 42) = 0
+host command_register("items cooldown <id: word> <ticks: int 0..1000>", "", 43) = 0
+host command_register("items registry <kind: word> <key: word>", "", 44) = 0
+host command_register("items level <level: int 1..10>", "", 45) = 0
+host command_register("items recipes", "", 46) = 0
+host command_register("items book", "", 47) = 0
+host command_register("items craft", "", 48) = 0
+host command_register("items menu", "", 49) = 0
+host command_register("items closemenu", "", 50) = 0
+host command_register("items window", "", 51) = 0
+host command_register("items merchant", "", 52) = 0
+host command_register("items loot", "", 53) = 0
+host command_register("entities tour", "", 54) = 0
+host command_register("entities bad", "", 55) = 0
+host event_on("plugin.enable", 2, 56) = 0
+host channel_listen("example:chan", 57) = 0
+host packet_listen("serverbound.chat_message", {"priority": "first"}, 58) = 1
+host packet_listen("clientbound.*", {"observe": true}, 59) = 2
+host packet_listen("serverbound.play.*", {"priority": "late", "observe": true}, 60) = 3
+host packet_listen("serverbound.chat_command", null, 61) = 4
+host packet_listen("nope", null, 62) = -3
+host command_register("pkt <action: word>", "", 63) = 0
+callback token=56 ctx=1
+host config_i64("payout-amount", 5) = 5
+host config_i64("payout-period", 1200) = 1200
+host log(1, "ready: 5 coins every 1200 ticks")
+world event plugin.enable listeners=1 cancelled=0
+# join Steve
+world join Steve handle=1
+callback token=3 ctx=2
+host event_player(2) = 1
+host player_name(1, cap=256) = 5 "Steve"
+host data_get_bool(1, "welcomed", 0) = 0
+host data_set_bool(1, "welcomed", 1) = 0
+host config_i64("welcome-bonus", 50) = 50
+host data_get_i64(1, "coins", 0) = 0
+host data_set_i64(1, "coins", 50) = 0
+host player_send(1, "@welcome", {name="Steve", amount="50"}) = 0
+world send Steve "<gold>Welcome, <yellow>Steve</yellow>! Here is <green>50</green> coins to get started."
+world event player.join listeners=1 cancelled=0
+# command Steve items give minecraft:bread 5
+callback token=36 ctx=3
+host command_arg_str(3, "id", cap=256) = 15 "minecraft:bread"
+host command_source_name(3, cap=256) = 5 "Steve"
+host player_by_name("Steve") = 1
+host inventory_of_player(1) = 1
+host command_arg_i64(3, "count") = 0 out=5
+host inventory_add(1, {"id": "minecraft:bread", "count": 5, "name": "<gold>Gift"}) = 0
+world inventory player:Steve added {"id": "minecraft:bread", "count": 5, "name": "<gold>Gift"} leftover=0
+host command_reply(3, "@items-line", {text="left over 0"}) = 0
+world reply Steve "<gray>left over 0"
+host inventory_release(1) = 0
+# command Steve items give diamond 64
+callback token=36 ctx=4
+host command_arg_str(4, "id", cap=256) = 7 "diamond"
+host command_source_name(4, cap=256) = 5 "Steve"
+host player_by_name("Steve") = 1
+host inventory_of_player(1) = 2
+host command_arg_i64(4, "count") = 0 out=64
+host inventory_add(2, {"id": "minecraft:diamond", "count": 64, "name": "<gold>Gift"}) = 0
+world inventory player:Steve added {"id": "minecraft:diamond", "count": 64, "name": "<gold>Gift"} leftover=0
+host command_reply(4, "@items-line", {text="left over 0"}) = 0
+world reply Steve "<gray>left over 0"
+host inventory_release(2) = 0
+# command Steve items give nothing_such 1
+callback token=36 ctx=5
+host command_arg_str(5, "id", cap=256) = 12 "nothing_such"
+host command_source_name(5, cap=256) = 5 "Steve"
+host player_by_name("Steve") = 1
+host inventory_of_player(1) = 3
+host command_arg_i64(5, "count") = 0 out=1
+host inventory_add(3, null) = -3
+host command_reply(5, "@items-line", {text="left over -3"}) = 0
+world reply Steve "<gray>left over -3"
+host inventory_release(3) = 0
+# command Steve items count minecraft:bread
+callback token=38 ctx=6
+host command_arg_str(6, "id", cap=256) = 15 "minecraft:bread"
+host command_source_name(6, cap=256) = 5 "Steve"
+host player_by_name("Steve") = 1
+host inventory_of_player(1) = 4
+host inventory_count(4, "minecraft:bread") = 5
+host command_reply(6, "@items-line", {text="count 5"}) = 0
+world reply Steve "<gray>count 5"
+host inventory_size(4) = 41
+host command_reply(6, "@items-line", {text="size 41"}) = 0
+world reply Steve "<gray>size 41"
+host inventory_release(4) = 0
+# command Steve items take bread 2
+callback token=37 ctx=7
+host command_arg_str(7, "id", cap=256) = 5 "bread"
+host command_source_name(7, cap=256) = 5 "Steve"
+host player_by_name("Steve") = 1
+host inventory_of_player(1) = 5
+host command_arg_i64(7, "count") = 0 out=2
+host inventory_remove(5, "bread", 2) = 2
+host command_reply(7, "@items-line", {text="taken 2"}) = 0
+world reply Steve "<gray>taken 2"
+host inventory_release(5) = 0
+# command Steve items count bread
+callback token=38 ctx=8
+host command_arg_str(8, "id", cap=256) = 5 "bread"
+host command_source_name(8, cap=256) = 5 "Steve"
+host player_by_name("Steve") = 1
+host inventory_of_player(1) = 6
+host inventory_count(6, "bread") = 3
+host command_reply(8, "@items-line", {text="count 3"}) = 0
+world reply Steve "<gray>count 3"
+host inventory_size(6) = 41
+host command_reply(8, "@items-line", {text="size 41"}) = 0
+world reply Steve "<gray>size 41"
+host inventory_release(6) = 0
+# command Steve items slot 27
+callback token=39 ctx=9
+host command_arg_i64(9, "slot") = 0 out=27
+host command_source_name(9, cap=256) = 5 "Steve"
+host player_by_name("Steve") = 1
+host inventory_of_player(1) = 7
+host inventory_get(7, 27, cap=512) = 47 {"id": "minecraft:bread", "count": 3, "name": "<gold>Gift"}
+host command_reply(9, "@items-line", {text="in slot 3"}) = 0
+world reply Steve "<gray>in slot 3"
+host inventory_get(7, 99, cap=512) = -3
+host command_reply(9, "@items-line", {text="bad slot -3"}) = 0
+world reply Steve "<gray>bad slot -3"
+host inventory_release(7) = 0
+# command Steve items hand
+callback token=40 ctx=10
+host command_source_name(10, cap=256) = 5 "Steve"
+host player_by_name("Steve") = 1
+host inventory_of_player(1) = 8
+host inventory_held_slot(8) = 0
+host command_reply(10, "@items-line", {text="held 0"}) = 0
+world reply Steve "<gray>held 0"
+host inventory_set_held_slot(8, 4) = 0
+host command_reply(10, "@items-line", {text="set held 0"}) = 0
+world reply Steve "<gray>set held 0"
+host inventory_held_slot(8) = 4
+host command_reply(10, "@items-line", {text="held 4"}) = 0
+world reply Steve "<gray>held 4"
+host inventory_contents(8, cap=2048) = 127 [{"slot": 27, "item": {"id": "minecraft:bread", "count": 3, "name": "<gold>Gift"}}, {"slot": 28, "item": {"id": "minecraft:diamond", "count": 64, "name": "<gold>Gift"}}]
+host command_reply(10, "@items-line", {text="contents bytes 127"}) = 0
+world reply Steve "<gray>contents bytes 127"
+host inventory_release(8) = 0
+# command Steve items chest
+callback token=41 ctx=11
+host inventory_of_block("world", 10, 64, 10) = 9
+host inventory_size(9) = 27
+host command_reply(11, "@items-line", {text="chest 27"}) = 0
+world reply Steve "<gray>chest 27"
+host inventory_count(9, "minecraft:bread") = 5
+host command_reply(11, "@items-line", {text="bread 5"}) = 0
+world reply Steve "<gray>bread 5"
+host inventory_add(9, {"id": "minecraft:apple", "count": 3}) = 0
+world inventory block:world:10:64:10 added {"id": "minecraft:apple", "count": 3} leftover=0
+host command_reply(11, "@items-line", {text="left over 0"}) = 0
+world reply Steve "<gray>left over 0"
+host inventory_count(9, "minecraft:apple") = 3
+host command_reply(11, "@items-line", {text="apples 3"}) = 0
+world reply Steve "<gray>apples 3"
+host inventory_remove(9, "minecraft:bread", 2) = 2
+host command_reply(11, "@items-line", {text="taken 2"}) = 0
+world reply Steve "<gray>taken 2"
+host inventory_of_block("world", 0, 0, 0) = -1
+host command_reply(11, "@items-line", {text="no block -1"}) = 0
+world reply Steve "<gray>no block -1"
+host inventory_of_block("world", 11, 64, 10) = 10
+host inventory_size(10) = 5
+host command_reply(11, "@items-line", {text="hopper 5"}) = 0
+world reply Steve "<gray>hopper 5"
+host inventory_release(10) = 0
+host inventory_release(9) = 0
+# command Steve items ender
+callback token=42 ctx=12
+host command_source_name(12, cap=256) = 5 "Steve"
+host player_by_name("Steve") = 1
+host inventory_of_ender(1) = 11
+host inventory_set(11, 0, {"id": "minecraft:diamond", "count": 5}) = 0
+world inventory ender:Steve slot 0 = {"id": "minecraft:diamond", "count": 5}
+host command_reply(12, "@items-line", {text="put 0"}) = 0
+world reply Steve "<gray>put 0"
+host inventory_count(11, "minecraft:diamond") = 5
+host command_reply(12, "@items-line", {text="diamonds 5"}) = 0
+world reply Steve "<gray>diamonds 5"
+host inventory_size(11) = 27
+host command_reply(12, "@items-line", {text="size 27"}) = 0
+world reply Steve "<gray>size 27"
+host inventory_release(11) = 0
+# command Steve items cooldown minecraft:ender_pearl 40
+callback token=43 ctx=13
+host command_arg_str(13, "id", cap=256) = 21 "minecraft:ender_pearl"
+host command_arg_i64(13, "ticks") = 0 out=40
+host command_source_name(13, cap=256) = 5 "Steve"
+host player_by_name("Steve") = 1
+host item_set_cooldown(1, "minecraft:ender_pearl", 40) = 0
+host command_reply(13, "@items-line", {text="set 0"}) = 0
+world reply Steve "<gray>set 0"
+host item_cooldown(1, "minecraft:ender_pearl") = 40
+host command_reply(13, "@items-line", {text="left 40"}) = 0
+world reply Steve "<gray>left 40"
+# command Steve items cooldown minecraft:ender_pearl 0
+callback token=43 ctx=14
+host command_arg_str(14, "id", cap=256) = 21 "minecraft:ender_pearl"
+host command_arg_i64(14, "ticks") = 0 out=0
+host command_source_name(14, cap=256) = 5 "Steve"
+host player_by_name("Steve") = 1
+host item_set_cooldown(1, "minecraft:ender_pearl", 0) = 0
+host command_reply(14, "@items-line", {text="set 0"}) = 0
+world reply Steve "<gray>set 0"
+host item_cooldown(1, "minecraft:ender_pearl") = 0
+host command_reply(14, "@items-line", {text="left 0"}) = 0
+world reply Steve "<gray>left 0"
+# command Steve items registry item minecraft:bread
+callback token=44 ctx=15
+host command_arg_str(15, "kind", cap=256) = 4 "item"
+host command_arg_str(15, "key", cap=256) = 15 "minecraft:bread"
+host registry_get("item", "minecraft:bread", cap=2048) = 33 {"max_stack_size": 64, "max_damage": 0}
+host command_reply(15, "@items-line", {text="bytes 33"}) = 0
+world reply Steve "<gray>bytes 33"
+# command Steve items registry item minecraft:nothing_such
+callback token=44 ctx=16
+host command_arg_str(16, "kind", cap=256) = 4 "item"
+host command_arg_str(16, "key", cap=256) = 22 "minecraft:nothing_such"
+host registry_get("item", "minecraft:nothing_such", cap=2048) = -1
+host command_reply(16, "@items-line", {text="bytes -1"}) = 0
+world reply Steve "<gray>bytes -1"
+# command Steve items registry enchantments none
+callback token=44 ctx=17
+host command_arg_str(17, "kind", cap=256) = 12 "enchantments"
+host command_arg_str(17, "key", cap=256) = 4 "none"
+host registry_get("enchantments", "none", cap=2048) = 45 ["minecraft:sharpness", "minecraft:unbreaking"]
+host command_reply(17, "@items-line", {text="bytes 45"}) = 0
+world reply Steve "<gray>bytes 45"
+# command Steve items registry nothing none
+callback token=44 ctx=18
+host command_arg_str(18, "kind", cap=256) = 7 "nothing"
+host command_arg_str(18, "key", cap=256) = 4 "none"
+host registry_get("nothing", "none", cap=2048) = -3
+host command_reply(18, "@items-line", {text="bytes -3"}) = 0
+world reply Steve "<gray>bytes -3"
+# command Steve items level 3
+callback token=45 ctx=19
+host command_arg_i64(19, "level") = 0 out=3
+host enchantment_level_value({"type": "linear", "base": 1, "per_level_above_first": 0.5}, 3) = 2
+host command_reply(19, "@items-line", {text="value x100 200"}) = 0
+world reply Steve "<gray>value x100 200"
+# command Steve items recipes
+callback token=46 ctx=20
+host recipe_add("example:dirt_gems", "{\"type\":\"minecraft:crafting_shapeless\",\"ingredients\":[\"minecraft:dirt\"],\"result\":{\"id\":\"minecraft:diamond\",\"count\":2}}") = 0
+world recipe added example:dirt_gems
+host command_reply(20, "@items-line", {text="added 0"}) = 0
+world reply Steve "<gray>added 0"
+host recipe_add("example:dirt_gems", "{\"type\":\"minecraft:crafting_shapeless\",\"ingredients\":[\"minecraft:dirt\"],\"result\":{\"id\":\"minecraft:diamond\",\"count\":2}}") = -3
+host command_reply(20, "@items-line", {text="again -3"}) = 0
+world reply Steve "<gray>again -3"
+host recipe_has("example:dirt_gems") = 1
+host command_reply(20, "@items-line", {text="has 1"}) = 0
+world reply Steve "<gray>has 1"
+host recipe_ids(cap=2048) = 60 ["minecraft:oak_planks", "minecraft:stick", "example:dirt_gems"]
+host command_reply(20, "@items-line", {text="ids bytes 60"}) = 0
+world reply Steve "<gray>ids bytes 60"
+host recipe_get("example:dirt_gems", cap=2048) = 59 {"id": "example:dirt_gems", "type": "minecraft:crafting_shapeless"}
+host command_reply(20, "@items-line", {text="get bytes 59"}) = 0
+world reply Steve "<gray>get bytes 59"
+host recipe_remove("example:dirt_gems") = 0
+world recipe removed example:dirt_gems
+host command_reply(20, "@items-line", {text="removed 0"}) = 0
+world reply Steve "<gray>removed 0"
+host recipe_remove("example:dirt_gems") = -1
+host command_reply(20, "@items-line", {text="removed again -1"}) = 0
+world reply Steve "<gray>removed again -1"
+# command Steve items book
+callback token=47 ctx=21
+host command_source_name(21, cap=256) = 5 "Steve"
+host player_by_name("Steve") = 1
+host recipe_book_set(1, ["minecraft:oak_planks", "minecraft:stick"], 1) = 2
+host command_reply(21, "@items-line", {text="learned 2"}) = 0
+world reply Steve "<gray>learned 2"
+host recipe_book_has(1, "minecraft:stick") = 1
+host command_reply(21, "@items-line", {text="knows 1"}) = 0
+world reply Steve "<gray>knows 1"
+host recipe_book_get(1, cap=2048) = 41 ["minecraft:oak_planks", "minecraft:stick"]
+host command_reply(21, "@items-line", {text="book bytes 41"}) = 0
+world reply Steve "<gray>book bytes 41"
+host recipe_book_set(1, ["minecraft:oak_planks", "minecraft:stick"], 0) = 2
+host command_reply(21, "@items-line", {text="forgot 2"}) = 0
+world reply Steve "<gray>forgot 2"
+host recipe_book_has(1, "minecraft:stick") = 0
+host command_reply(21, "@items-line", {text="knows 0"}) = 0
+world reply Steve "<gray>knows 0"
+host recipe_book_resend(1) = 0
+world recipe-book resent Steve
+host command_reply(21, "@items-line", {text="resent 0"}) = 0
+world reply Steve "<gray>resent 0"
+# command Steve items craft
+callback token=48 ctx=22
+host recipe_station("crafting", {"width": 1, "height": 1, "items": [{"id": "minecraft:oak_log", "count": 1}]}, cap=2048) = 86 {"recipe": "minecraft:oak_planks", "result": {"id": "minecraft:oak_planks", "count": 4}, "remaining": [null]}
+host command_reply(22, "@items-line", {text="status 0"}) = 0
+world reply Steve "<gray>status 0"
+host command_reply(22, "@items-line", {text="result count 4"}) = 0
+world reply Steve "<gray>result count 4"
+host recipe_station("grinder", {"width": 1, "height": 1, "items": [{"id": "minecraft:oak_log", "count": 1}]}, cap=2048) = -3
+host command_reply(22, "@items-line", {text="unknown -3"}) = 0
+world reply Steve "<gray>unknown -3"
+# command Steve items loot
+callback token=53 ctx=23
+host loot_tables(cap=2048) = 62 ["minecraft:chests/simple_dungeon", "minecraft:entities/zombie"]
+host command_reply(23, "@items-line", {text="tables bytes 62"}) = 0
+world reply Steve "<gray>tables bytes 62"
+host loot_roll("minecraft:entities/zombie", {"seed": 3, "luck": 1.5}, cap=2048) = 39 [{"id": "minecraft:rotten_flesh", "count": 2}]
+host command_reply(23, "@items-line", {text="zombie bytes 39"}) = 0
+world reply Steve "<gray>zombie bytes 39"
+host loot_roll("minecraft:nothing", none, cap=2048) = -1
+host command_reply(23, "@items-line", {text="no table -1"}) = 0
+world reply Steve "<gray>no table -1"
+host loot_roll_json("{\"type\":\"minecraft:chest\",\"pools\":[]}", none, cap=2048) = 32 [{"id": "minecraft:stone", "count": 1}]
+host command_reply(23, "@items-line", {text="json bytes 32"}) = 0
+world reply Steve "<gray>json bytes 32"
+host loot_roll_json("nope", none, cap=2048) = -1
+host command_reply(23, "@items-line", {text="bad json -1"}) = 0
+world reply Steve "<gray>bad json -1"
+host loot_number("7", 1, 0, cap=2048) = 9 7.5
+host command_reply(23, "@items-line", {text="number bytes 9"}) = 0
+world reply Steve "<gray>number bytes 9"
+host loot_apply({"functions": "{\"function\":\"minecraft:set_count\"}", "item": {"id": "minecraft:bread", "count": 2}}, cap=2048) = 30 {"id": "minecraft:bread", "count": 3}
+host command_reply(23, "@items-line", {text="apply bytes 30"}) = 0
+world reply Steve "<gray>apply bytes 30"
+host loot_enchant({"item": {"id": "minecraft:diamond_sword"}, "levels": 30}, cap=2048) = 75 {"id": "minecraft:diamond_sword", "count": 1, "enchantments": {"minecraft:sharpness": 4}}
+host command_reply(23, "@items-line", {text="enchant bytes 75"}) = 0
+world reply Steve "<gray>enchant bytes 75"
+host trades_roll("minecraft:farmer", 2, none, cap=2048) = 130 [{"cost_a": {"id": "minecraft:wheat", "count": 20}, "cost_b": null, "result": {"id": "minecraft:emerald", "count": 1}, "max_uses": 16, "xp": 2, "price_multiplier": 0.05}]
+host command_reply(23, "@items-line", {text="trades bytes 130"}) = 0
+world reply Steve "<gray>trades bytes 130"
+host trades_roll("minecraft:nothing", 2, none, cap=2048) = -1
+host command_reply(23, "@items-line", {text="no profession -1"}) = 0
+world reply Steve "<gray>no profession -1"
+# command Steve items window
+callback token=51 ctx=24
+host command_source_name(24, cap=256) = 5 "Steve"
+host player_by_name("Steve") = 1
+world window opened Steve hopper "<green>Sorter" slots=41
+host window_open(1, {"kind": "hopper", "title": "<green>Sorter", "items": [{"id": "minecraft:coal", "count": 7}]}) = 1
+host command_reply(24, "@items-line", {text="container 1"}) = 0
+world reply Steve "<gray>container 1"
+host window_info(1, cap=2048) = 59 {"container_id": 1, "kind": "hopper", "slots": 41, "plugin": true, "world": "world"}
+host command_reply(24, "@items-line", {text="info bytes 59"}) = 0
+world reply Steve "<gray>info bytes 59"
+world window title Steve "<red>Sorted"
+host window_update(1, {"title": "<red>Sorted"}) = 0
+host command_reply(24, "@items-line", {text="update 0"}) = 0
+world reply Steve "<gray>update 0"
+host inventory_of_window(1) = 12
+host inventory_size(12) = 41
+host command_reply(24, "@items-line", {text="window size 41"}) = 0
+world reply Steve "<gray>window size 41"
+host inventory_count(12, "minecraft:coal") = 7
+host command_reply(24, "@items-line", {text="coal 7"}) = 0
+world reply Steve "<gray>coal 7"
+host window_close(1) = 0
+world window closed Steve
+host command_reply(24, "@items-line", {text="close 0"}) = 0
+world reply Steve "<gray>close 0"
+host window_close(1) = -1
+host command_reply(24, "@items-line", {text="close again -1"}) = 0
+world reply Steve "<gray>close again -1"
+host inventory_release(12) = 0
+# command Steve items merchant
+callback token=52 ctx=25
+host command_source_name(25, cap=256) = 5 "Steve"
+host player_by_name("Steve") = 1
+host merchant_open(1, {"title": "<gold>Trader", "offers": [{"buy": {"id": "minecraft:emerald", "count": 2}, "sell": {"id": "minecraft:bread", "count": 6}, "max_uses": 8, "xp": 3, "price_multiplier": 0.05}]}) = 0
+world merchant Steve "<gold>Trader" offers=1
+host command_reply(25, "@items-line", {text="merchant 0"}) = 0
+world reply Steve "<gray>merchant 0"
+host command_source_name(25, cap=256) = 5 "Steve"
+host player_by_name("Steve") = 1
+host merchant_open(1, {}) = -3
+host command_reply(25, "@items-line", {text="bad merchant -3"}) = 0
+world reply Steve "<gray>bad merchant -3"
+# command Steve items menu
+callback token=49 ctx=26
+host command_source_name(26, cap=256) = 5 "Steve"
+host player_by_name("Steve") = 1
+host container_menu_create({"title": "<gold>Items menu", "rows": 1}) = 1
+host command_reply(26, "@items-line", {text="menu 1"}) = 0
+world reply Steve "<gray>menu 1"
+host container_menu_set(1, 2, {"id": "minecraft:diamond", "count": 1, "name": "<aqua>Click me"}, 64) = 0
+host command_reply(26, "@items-line", {text="slot 2 0"}) = 0
+world reply Steve "<gray>slot 2 0"
+host container_menu_set(1, 4, {"id": "minecraft:barrier", "count": 1, "name": "<red>Refuse"}, 65) = 0
+host command_reply(26, "@items-line", {text="slot 4 0"}) = 0
+world reply Steve "<gray>slot 4 0"
+host container_menu_set(1, 99, {"id": "minecraft:diamond", "count": 1}, 0) = -3
+host command_reply(26, "@items-line", {text="slot 99 -3"}) = 0
+world reply Steve "<gray>slot 99 -3"
+world window opened Steve chest "<gold>Items menu" slots=45
+host container_menu_open(1, 1) = 0
+host command_reply(26, "@items-line", {text="open 0"}) = 0
+world reply Steve "<gray>open 0"
+# items-click 1 2 Steve
+callback token=64 ctx=27
+host container_menu_click_info(27, cap=256) = 40 {"player": 1, "slot": 2, "button": 0, "mode": "pickup"}
+host log(1, "clicked slot 2")
+host container_menu_click_result(27, {"id": "minecraft:emerald", "count": 1}) = 0
+host container_menu_click_cancel(27, 1) = 0
+host log(1, "cancel 0")
+world menu 1 slot 2 = {"id": "minecraft:emerald", "count": 1}
+# items-click 1 4 Steve
+callback token=65 ctx=28
+host container_menu_click_cancel(28, 0) = -4
+host log(1, "uncancel -4")
+host container_menu_click_result(28, null) = 0
+world menu 1 slot 4 = null
+# items-click 1 0 Steve
+world click-ignored items menu=1 slot=0
+# command Steve items closemenu
+callback token=50 ctx=29
+host command_source_name(29, cap=256) = 5 "Steve"
+host player_by_name("Steve") = 1
+world window closed Steve
+host container_menu_close(1, 1) = 0
+host command_reply(29, "@items-line", {text="close 0"}) = 0
+world reply Steve "<gray>close 0"
+host command_source_name(29, cap=256) = 5 "Steve"
+host player_by_name("Steve") = 1
+host container_menu_close(1, 1) = -1
+host command_reply(29, "@items-line", {text="close again -1"}) = 0
+world reply Steve "<gray>close again -1"
+# leave Steve
+world event player.leave listeners=0 cancelled=0
+world leave Steve
+# command console items give bread 1
+callback token=36 ctx=30
+host command_arg_str(30, "id", cap=256) = 5 "bread"
+host command_source_name(30, cap=256) = 7 "CONSOLE"
+host player_by_name("CONSOLE") = 0
+host inventory_of_player(0) = -3
+host command_arg_i64(30, "count") = 0 out=1
+host inventory_add(-3, {"id": "minecraft:bread", "count": 1, "name": "<gold>Gift"}) = -3
+host command_reply(30, "@items-line", {text="left over -3"}) = 0
+world reply CONSOLE "<gray>left over -3"

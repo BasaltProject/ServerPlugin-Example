@@ -10,41 +10,49 @@
 <h2 align="center">ServerPlugin-Example</h2>
 
 <p align="center">
-  <strong>A reference plugin for Basalt Server's Lua plugin API.</strong>
+  <strong>A reference plugin for Basalt Server's WebAssembly plugin API.</strong>
 </p>
 
 <p align="center">
   <img alt="Java Edition" src="https://img.shields.io/badge/Java_Edition-26.3-62B47A?logo=minecraft&logoColor=white">
-  <img alt="Lua" src="https://img.shields.io/badge/Lua-5.5.1-000080?logo=lua&logoColor=white">
-  <img alt="Plugin API" src="https://img.shields.io/badge/plugin_api-1-000080">
+  <img alt="C++" src="https://img.shields.io/badge/language-C%2B%2B-00599C?logo=cplusplus&logoColor=white">
+  <img alt="WebAssembly" src="https://img.shields.io/badge/WebAssembly-654FF0?logo=webassembly&logoColor=white">
+  <img alt="Plugin ABI" src="https://img.shields.io/badge/plugin_abi-1-000080">
   <img alt="License" src="https://img.shields.io/badge/license-GPL--3.0-green">
 </p>
 
 ## About
 
 A greeter that pays coins for playing, a leaderboard and a shop to spend them in. It shows what a real plugin looks
-like against the native Lua API, and its code tracks the API as it evolves.
+like against the plugin ABI, and its code tracks the ABI as it evolves. This branch is written in C++ with the SDK
+that [Kiln](https://github.com/BasaltProject/Kiln) ships.
 
-It is a `.bspkg` in source form (`plugin.toml`, code under `src/`, everything else under `resources/`), so dropping it
-into `plugins/` as a loose folder loads it exactly as it would packed.
+The plugin is exactly the same in every language, one branch each:
+
+| | Branches |
+|---|---|
+| Recommended | `cpp` (default), `zig`, `rust` |
+| By preference | `assemblyscript`, `go`, `kotlin`, `csharp`, `java` |
+
+The by-preference branches are not the choice when maximum performance is the goal.
 
 | File | API surface |
 |---|---|
-| `src/coins.lua` | `player.data`, a balance stored per plugin |
-| `src/events.lua` | `on("player.join", ...)`, `every(...)`, `placeholder(...)` |
-| `src/shop.lua` | `menu{...}` with click handlers |
-| `src/commands.lua` | `cmd(...)` with literal, word and ranged int arguments |
+| `src/coins/coins.cpp` | `data_get_i64`, a balance stored per plugin |
+| `src/events/events.cpp` | `on("player.join", ...)`, `every(...)`, `placeholder(...)` |
+| `src/shop/shop.cpp` | `menu_create` and `menu_set` with click handlers |
+| `src/commands/commands.cpp` | `command(...)` with literal, word and ranged int arguments |
 | `resources/` | `config.toml` and `lang/en_us.toml` messages |
 
 ## Trying it
 
 ```bash
-cp -r ServerPlugin-Example /path/to/server/plugins/example
+kiln build && kiln pack
 ```
 
-Join to get a welcome bonus, use `/coins` and `/coins top`, and `/shop` to spend them. The
-[Kiln](https://github.com/BasaltProject/Kiln) check runs on every push; fork this repository for your own plugin and
-it runs there too.
+Drop the `.bspkg` from `build/` into the server's `plugins/` folder. Join to get a welcome bonus, use `/coins` and
+`/coins top`, and `/shop` to spend them. `test/run.sh` replays `test/scenario.txt` with `basalt-wasm-trace` and diffs
+the output with `test/expected.trace`, which is identical on every branch.
 
 ## License
 

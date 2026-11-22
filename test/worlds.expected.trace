@@ -1,0 +1,245 @@
+# enable
+init
+host translate("shop-title", {}, cap=256) = 20 "<dark_gray>Coin Shop"
+host menu_create("<dark_gray>Coin Shop", 3) = 1
+host config_i64("shop.sparkles-price", 100) = 100
+host translate("shop-item-sparkles", {}, cap=256) = 14 "<aqua>Sparkles"
+host translate("shop-item-sparkles-lore", {price="100"}, cap=256) = 37 "<gray>100 coins, a burst of particles"
+host menu_set(1, 11, "minecraft:blaze_powder", "<aqua>Sparkles", "<gray>100 coins, a burst of particles", 1) = 0
+host config_i64("shop.fireworks-price", 150) = 150
+host translate("shop-item-fireworks", {}, cap=256) = 23 "<light_purple>Fireworks"
+host translate("shop-item-fireworks-lore", {price="150"}, cap=256) = 42 "<gray>150 coins, one firework at your feet"
+host menu_set(1, 15, "minecraft:firework_rocket", "<light_purple>Fireworks", "<gray>150 coins, one firework at your feet", 2) = 0
+host event_on("player.join", 2, 3) = 0
+host config_i64("payout-period", 1200) = 1200
+host task_every(1200, 1200, 4) = 1
+host placeholder_register("coins", 5) = 0
+host command_register("coins [target: word]", "", 6) = 0
+host command_register("coins top [limit: int 1..25]", "", 7) = 0
+host command_register("shop", "example.shop", 8) = 0
+host event_on_ex("player.chat", 2, 0, none, 9) = 0
+host event_on_ex("player.chat", 4, 3, none, 10) = 0
+host event_on_ex("player.join", 1, 0, {"world": "world"}, 11) = 0
+host event_on_ex("example:ping", 2, 0, none, 12) = 0
+host event_on_ex("no.such.event", 2, 0, none, 13) = -3
+host permission_provide(10, 3, 14) = 1
+host service_register("example.echo", 15) = 1
+host command_register("srv hello", "", 16) = 0
+host command_register("srv perms", "", 17) = 0
+host command_register("srv broadcast", "", 18) = 0
+host command_register("srv info", "", 19) = 0
+host command_register("srv admin", "", 20) = 0
+host command_register("srv files", "", 21) = 0
+host command_register("srv store", "", 22) = 0
+host command_register("srv service", "", 23) = 0
+host command_register("srv later", "", 24) = 0
+host command_register("srv manage", "", 25) = 0
+host command_register("srv unmanage", "", 26) = 0
+host command_register("worlds", "", 27) = 0
+host command_register("hud board", "", 28) = 0
+host command_register("hud bars", "", 29) = 0
+host command_register("hud holograms", "", 30) = 0
+host command_register("hud npcs", "", 31) = 0
+host command_register("hud npc-end", "", 32) = 0
+host command_register("hud tab", "", 33) = 0
+host command_register("hud surfaces", "", 34) = 0
+host command_register("hud surface-end", "", 35) = 0
+host command_register("items give <id: word> [count: int 1..64]", "", 36) = 0
+host command_register("items take <id: word> [count: int 1..64]", "", 37) = 0
+host command_register("items count <id: word>", "", 38) = 0
+host command_register("items slot <slot: int 0..40>", "", 39) = 0
+host command_register("items hand", "", 40) = 0
+host command_register("items chest", "", 41) = 0
+host command_register("items ender", "", 42) = 0
+host command_register("items cooldown <id: word> <ticks: int 0..1000>", "", 43) = 0
+host command_register("items registry <kind: word> <key: word>", "", 44) = 0
+host command_register("items level <level: int 1..10>", "", 45) = 0
+host command_register("items recipes", "", 46) = 0
+host command_register("items book", "", 47) = 0
+host command_register("items craft", "", 48) = 0
+host command_register("items menu", "", 49) = 0
+host command_register("items closemenu", "", 50) = 0
+host command_register("items window", "", 51) = 0
+host command_register("items merchant", "", 52) = 0
+host command_register("items loot", "", 53) = 0
+host command_register("entities tour", "", 54) = 0
+host command_register("entities bad", "", 55) = 0
+host event_on("plugin.enable", 2, 56) = 0
+host channel_listen("example:chan", 57) = 0
+host packet_listen("serverbound.chat_message", {"priority": "first"}, 58) = 1
+host packet_listen("clientbound.*", {"observe": true}, 59) = 2
+host packet_listen("serverbound.play.*", {"priority": "late", "observe": true}, 60) = 3
+host packet_listen("serverbound.chat_command", null, 61) = 4
+host packet_listen("nope", null, 62) = -3
+host command_register("pkt <action: word>", "", 63) = 0
+callback token=56 ctx=1
+host config_i64("payout-amount", 5) = 5
+host config_i64("payout-period", 1200) = 1200
+host log(1, "ready: 5 coins every 1200 ticks")
+world event plugin.enable listeners=1 cancelled=0
+# join Steve
+world join Steve handle=1
+callback token=3 ctx=2
+host event_player(2) = 1
+host player_name(1, cap=256) = 5 "Steve"
+host data_get_bool(1, "welcomed", 0) = 0
+host data_set_bool(1, "welcomed", 1) = 0
+host config_i64("welcome-bonus", 50) = 50
+host data_get_i64(1, "coins", 0) = 0
+host data_set_i64(1, "coins", 50) = 0
+host player_send(1, "@welcome", {name="Steve", amount="50"}) = 0
+world send Steve "<gold>Welcome, <yellow>Steve</yellow>! Here is <green>50</green> coins to get started."
+world event player.join listeners=1 cancelled=0
+# command console worlds
+callback token=27 ctx=3
+host player_by_name("Steve") = 1
+host world_by_name("world") = 1
+host world_by_name("nope") = 0
+host world_default() = 1
+host world_list(cap=8) = 1 [1]
+host world_name(1, cap=128) = 5 "world"
+host world_name(999, cap=128) = -3
+host world_get(1, "time", cap=128) = 2 0
+host world_get(1, "nope", cap=128) = -1
+host world_set(1, "day_time", 1000) = 0
+host world_set(1, "nope", 1) = -1
+host world_rule_get(1, "doDaylightCycle", cap=128) = 4 "true"
+host world_rule_get(1, "nope", cap=128) = -1
+host world_rule_set(1, "doDaylightCycle", "false") = 0
+host world_at(1, 1.5, 1.5, 64) = 1
+host request_cancel(1) = 0
+host world_at(1, 2.5, 2.5, 65) = 2
+host world_block_set(1, 0, 64, 0, "minecraft:stone", 0) = 0
+host world_block_set(1, 0, 64, 0, "nope:block", 0) = -3
+host world_block_get(1, 0, 64, 0, 0, cap=128) = 15 "minecraft:stone"
+host world_state_get(1, 0, 64, 0, 0) = 1
+host world_state_set(1, 1, 64, 0, 3, 0) = 0
+host world_state_get(999, 0, 64, 0, 0) = -3
+host world_states_read(1, 2, 0) = 2 [1, 3]
+host world_states_write(1, 2, 0) = 2
+host world_fill(1, 2, 64, 2, 5, 65, 5, 5, 0) = 32
+host world_fill(999, 0, 0, 0, 1, 1, 1, 1, 0) = -3
+host world_section_read(1, 0, 4, 0, 0) = 4096 nonair=36 sum=174
+host world_section_write(1, 0, 4, 0, 0) = 0
+host world_section_write(1, 0, 200, 0, 0) = -1
+host world_chunk_read(1, 0, 0, 0, cap=8) = 98304
+host world_chunk_apply(1, 0, 0, 1, 0) = 0 previous nonair=0 sum=0
+host world_changes_apply(1, 1, 0) = 1
+world settle effects=0
+host world_blocks_settle(1, 1, 0) = 1
+host world_blocks_notify(1, 1) = 1
+host world_blocks_reshape(1, 1, 0) = 1
+host world_state_valid(1, 0, 64, 0, 1) = 1
+host world_tick_schedule(1, 0, 64, 0, 5, 0) = 1
+host world_tick_pending(1, 0, 64, 0) = 0
+host world_state_set(1, 3, 64, 0, 6, 0) = 0
+host world_block_entity_edit(1, 1, 3, 64, 0, b"0a000000") = 0
+host world_block_entity_get(1, 3, 64, 0, cap=256) = 4 b"0a000000"
+host world_block_entity_get(1, 9, 64, 9, cap=256) = -1
+host world_block_entities(1, 0, 0, cap=8) = 3 [3, 64, 0]
+host world_data_set(1, 0, 0, 0, 0, b"0a000000") = 0
+host world_data_get(1, 0, 0, 0, 0, cap=256) = 4 b"0a000000"
+host world_data_get(1, 1, 9, 0, 9, cap=256) = -1
+host world_chunk_status(1, 0, 0) = 2
+host world_chunk_status(1, 9, 9) = 0
+host world_chunk_load(1, 3, 3, 8) = 1
+host world_chunk_unload(1, 3, 3) = 1
+host world_chunk_request(1, 4, 4, 8, 0, 66) = 3
+host world_chunks_loaded(1, cap=16) = 8 [-1, -1, 0, 0, 1, 0, 4, 4]
+host world_chunk_hold(1, "tour", 1) = 0
+host world_chunk_held(1, "tour", cap=8) = 2 [4, 4]
+host world_chunk_release(1, "tour", 1) = 0
+world resend chunks=1
+host world_chunks_resend(1, 1) = 0
+host world_stored_put(1, 7, 7, b"0a000000") = 0
+host world_stored_get(1, 7, 7, cap=256) = 4 b"0a000000"
+host world_stored_get(1, 8, 8, cap=256) = -1
+host world_stored_list(1, 0, 0, cap=8) = 2 [7, 7]
+host world_light_at(1, 0, 64, 0, 0) = 15
+host world_light_read(1, 0, 4, 0, 1, 1, cap=2048) = 2048 sum=522240
+host world_light_write(1, 0, 4, 0, 1, b"0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000") = 0
+host world_light_write(1, 0, 4, 0, 1, b"0a000000") = -3
+host world_light_check(1, 1, 67) = 4
+host world_biome_get(1, 0, 64, 0, cap=128) = 16 "minecraft:plains"
+host world_biome_set(1, 0, 64, 0, "minecraft:desert") = 0
+host world_biome_set(1, 0, 64, 0, "nope:biome") = -1
+host world_biomes_read(1, 0, 0, cap=8) = 1536
+host world_biomes_write(1, 0, 0, 4) = 0
+world sound world "minecraft:block.note_block.bell" block
+host world_sound(1, "minecraft:block.note_block.bell", "block", 0.5, 64, 0.5, 1, 1, 0) = 0
+host world_sound(1, "", "block", 0.5, 64, 0.5, 1, 1, 0) = -3
+world particle world "minecraft:flame" count=3
+host world_particle(1, {"type": "minecraft:flame", "x": 0.5, "y": 65, "z": 0.5, "count": 3}) = 0
+host world_particle(1, {"count": 1}) = -3
+world level-event world 1000 global=0
+host world_level_event(1, 1000, 0, 64, 0, 0, 0) = 0
+world block-event world 1 2
+host world_block_event(1, 0, 64, 0, 1, 2) = 0
+world explode world power=0 break=0
+host world_explode(1, 0.5, 64, 0.5, 0, 0, 0) = 1
+host world_lightning(1, 0.5, 64, 0.5) = 101
+world game-event world "minecraft:block_change"
+host world_game_event(1, "minecraft:block_change", 0.5, 64, 0.5, "") = 0
+host world_game_event(1, "", 0.5, 64, 0.5, "") = -3
+world view Steve sound_at args=["minecraft:block.note_block.bell", "block", 0.5, 64, 0.5, 1, 1, 0]
+host world_player_effect(1, "sound_at", ["minecraft:block.note_block.bell", "block", 0.5, 64, 0.5, 1, 1, 0], cap=64) = 1 null
+host world_player_effect(1, "nope", [], cap=64) = -1
+host world_border_get(1, cap=512) = 166 {"center_x": 0, "center_z": 0, "damage_amount": 0.2, "damage_buffer": 5, "lerp_ticks": 0, "size": 6e+07, "target_size": 6e+07, "warning_distance": 5, "warning_time": 15}
+host world_border_set(1, {"size": 100}) = 0
+host world_border_set(1, {"size": -1, "seconds": -1}) = -3
+host world_call(1, "ops", {}, cap=1024) = 543 ["save", "use_item", "survives", "bone_meal", "break_block", "drops", "signal", "own_signal", "analog_signal", "fluid", "fluid_flow", "highest", "random_tick", "grow_tree", "place_tree", "place_feature", "feature_ids", "pois", "climate", "humidity", "temperature", "beacon_scan", "lightning_target", "raids", "raid_control", "raid_bar", "set_raid", "sculk", "hive", "vault", "creaking_heart", "dragon_fight", "dragon_fight_action", "dragon_fight_bar", "place_end_gateway", "random_sequence", "inhabited_time", "force_chunk", "move_to_time_marker", "chunk_holders", "break_speed", "structures", "locate_structure", "locate_biome"]
+host world_call(1, "highest", {"x": 2, "z": 2}, cap=256) = 3 -65
+host world_call(1, "nope", {}, cap=256) = -1
+host structure_capture(1, 0, 64, 0, 3, 2, 3, 0, cap=2048) = 4 b"03020301"
+host structure_put("tour:a", b"03020301", 0) = 0
+host structure_put("tour:b", b"0a000000", 0) = 0
+host structure_list(cap=256) = 18 ["tour:a", "tour:b"]
+host structure_get("tour:a", cap=256) = 4 b"03020301"
+host structure_get("tour:zzz", cap=256) = -1
+host structure_file("tour:a", cap=128) = 16 "generated/tour:a"
+host structure_scan(b"03020301", {"x": 0, "y": 64, "z": 0}, cap=1024) = 63 {"size": [3, 2, 3], "blocks": [{"x": 0, "y": 64, "z": 0, "state": 1, "nbt": b""}], "jigsaws": []}
+host structure_place(b"03020301", {"world": "world", "x": 8, "y": 64, "z": 8}) = 0
+host structure_remove("tour:a", 0) = 0
+host structure_remove("tour:a", 0) = -1
+host noise_query({"op": "shape", "settings": "minecraft:overworld", "seed": 0}, cap=256) = 110 {"min_y": -64, "height": 384, "sea_level": 63, "default_block": 1, "default_fluid": 0, "legacy_random_source": false, "disable_mob_generation": false}
+host noise_query({"op": "nope"}, cap=256) = -1
+host noise_create({"id": "minecraft:temperature", "seed": 0}) = 1
+host noise_sample(1, 0, 0, 0) = 0 out=0
+host noise_info(1, cap=128) = 20 [-1, 1]
+host noise_release(1) = 0
+host noise_release(1) = -2
+host block_state_id("minecraft:stone") = 1
+host block_state_id("nope:block") = -1
+host block_state_text(1, cap=128) = 15 "minecraft:stone"
+host worlds_data("tables", {}, cap=1024) = 342 ["blocks", "block_properties", "state_flags", "block_hardness", "block_info", "block_shape", "block_outline", "block_visual", "block_entity_types", "block_sounds", "block_instrument", "tool_facts", "transform_state", "poi_type", "poi_tickets", "game_rules", "game_event_frequency", "data_version", "fix_nbt", "fix_name", "biomes", "items", "entity_types", "tags", "registry", "registry_data"]
+host worlds_data("blocks", {}, cap=512) = 100 [{"id": "minecraft:air", "first_state": 0, "state_count": 1}, {"id": "minecraft:stone", "first_state": 1, "state_count": 1}]
+host worlds_data("nope", {}, cap=64) = -1
+host datafix_call("types", {}, cap=128) = 17 ["chunk", "player"]
+host datafix_call("supports", {"type": "chunk"}, cap=64) = 1 true
+host datafix_call("steps", {"type": "chunk"}, cap=256) = 39 [{"version": 1343, "sub_version": 0, "name": "fix"}]
+host datafix_call("missing", {"type": "chunk", "from": 100, "to": 200}, cap=64) = 2 ""
+host datafix_call("legacy_state", {"id": 16}, cap=128) = 37 {"name": "minecraft:stone", "properties": {}}
+host datafix_call("modern_state", {"id": 16}, cap=128) = 37 {"name": "minecraft:stone", "properties": {}}
+host datafix_call("upgrade", {"type": "chunk", "nbt": b"0a000000", "from": 100, "to": 200}, cap=128) = 4 b"0a000000"
+host datafix_call("nope", {}, cap=64) = -1
+host world_at(1, 3.5, 3.5, 68) = 5
+# tick 2
+callback token=65 ctx=4
+host value_result(4, cap=16) = 1 null
+callback token=66 ctx=5
+host value_result(5, cap=16) = 1 true
+callback token=67 ctx=6
+host value_result(6, cap=16) = 2 1
+callback token=68 ctx=7
+host world_create({"name": "tour"}) = 2
+host world_at(2, 0.5, 0.5, 69) = 6
+callback token=69 ctx=8
+host world_create({"name": "tour"}) = -3
+host world_unload("nope", 0) = -1
+world unload "tour" save=0
+host world_unload("tour", 0) = 0
+world delete "tour"
+host world_delete("tour") = 0
+# disable
+world event plugin.disable listeners=0 cancelled=0
+world plugin-disabled requested

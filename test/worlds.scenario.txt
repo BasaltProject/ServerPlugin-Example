@@ -1,0 +1,6 @@
+# A tour of every import of the worlds area, with its error paths
+enable
+join Steve
+command console worlds
+tick 2
+disable

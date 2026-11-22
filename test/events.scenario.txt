@@ -1,0 +1,18 @@
+# The events area: filters, decision and post listeners, event_get and event_set, plugin events
+enable
+join Steve
+# A join in the filtered world runs the greeting; in another world no listener matches
+fire_event player.join player=Steve world=world
+fire_event player.join player=Steve world=nether
+# A form and a dialog answer through their completions
+answer_form Steve 1 name=Ann
+click_dialog Steve confirm payload
+# A chat is edited, cancelled, or emits a plugin event; the post listener sees the final state
+fire_event player.chat player=Steve message=hello
+fire_event player.chat player=Steve message=cancel
+fire_event player.chat player=Steve message=ping
+# Another plugin emits an event this one listens to
+emit_event example:ping from=Alex level=3
+# A player who says bye is kicked and leaves the world
+join Alex
+fire_event player.chat player=Alex message=bye

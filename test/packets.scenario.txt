@@ -1,0 +1,20 @@
+# Packets area: channels, listeners, ctx setters, registry queries
+enable
+join Steve
+command Steve pkt info
+command Steve pkt send
+command Steve pkt recv
+command Steve pkt chan
+command Steve pkt action
+# A chat packet is rewritten, then one starting with ! is cancelled
+packet_in Steve serverbound.chat_message 6869
+packet_in Steve serverbound.chat_message 21686c70
+packet_out Steve clientbound.set_title_text 7469746c65
+packet_in Steve serverbound.chat_command 2f686f6d65
+channel_in Steve example:chan hello
+command Steve pkt stale
+command Steve pkt unlisten
+packet_in Steve serverbound.chat_command 2f686f6d65
+leave Steve
+packet_out Steve clientbound.set_title_text 7469746c65
+disable

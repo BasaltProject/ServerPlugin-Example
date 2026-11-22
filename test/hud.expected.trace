@@ -1,0 +1,252 @@
+# enable
+init
+host translate("shop-title", {}, cap=256) = 20 "<dark_gray>Coin Shop"
+host menu_create("<dark_gray>Coin Shop", 3) = 1
+host config_i64("shop.sparkles-price", 100) = 100
+host translate("shop-item-sparkles", {}, cap=256) = 14 "<aqua>Sparkles"
+host translate("shop-item-sparkles-lore", {price="100"}, cap=256) = 37 "<gray>100 coins, a burst of particles"
+host menu_set(1, 11, "minecraft:blaze_powder", "<aqua>Sparkles", "<gray>100 coins, a burst of particles", 1) = 0
+host config_i64("shop.fireworks-price", 150) = 150
+host translate("shop-item-fireworks", {}, cap=256) = 23 "<light_purple>Fireworks"
+host translate("shop-item-fireworks-lore", {price="150"}, cap=256) = 42 "<gray>150 coins, one firework at your feet"
+host menu_set(1, 15, "minecraft:firework_rocket", "<light_purple>Fireworks", "<gray>150 coins, one firework at your feet", 2) = 0
+host event_on("player.join", 2, 3) = 0
+host config_i64("payout-period", 1200) = 1200
+host task_every(1200, 1200, 4) = 1
+host placeholder_register("coins", 5) = 0
+host command_register("coins [target: word]", "", 6) = 0
+host command_register("coins top [limit: int 1..25]", "", 7) = 0
+host command_register("shop", "example.shop", 8) = 0
+host event_on_ex("player.chat", 2, 0, none, 9) = 0
+host event_on_ex("player.chat", 4, 3, none, 10) = 0
+host event_on_ex("player.join", 1, 0, {"world": "world"}, 11) = 0
+host event_on_ex("example:ping", 2, 0, none, 12) = 0
+host event_on_ex("no.such.event", 2, 0, none, 13) = -3
+host permission_provide(10, 3, 14) = 1
+host service_register("example.echo", 15) = 1
+host command_register("srv hello", "", 16) = 0
+host command_register("srv perms", "", 17) = 0
+host command_register("srv broadcast", "", 18) = 0
+host command_register("srv info", "", 19) = 0
+host command_register("srv admin", "", 20) = 0
+host command_register("srv files", "", 21) = 0
+host command_register("srv store", "", 22) = 0
+host command_register("srv service", "", 23) = 0
+host command_register("srv later", "", 24) = 0
+host command_register("srv manage", "", 25) = 0
+host command_register("srv unmanage", "", 26) = 0
+host command_register("worlds", "", 27) = 0
+host command_register("hud board", "", 28) = 0
+host command_register("hud bars", "", 29) = 0
+host command_register("hud holograms", "", 30) = 0
+host command_register("hud npcs", "", 31) = 0
+host command_register("hud npc-end", "", 32) = 0
+host command_register("hud tab", "", 33) = 0
+host command_register("hud surfaces", "", 34) = 0
+host command_register("hud surface-end", "", 35) = 0
+host command_register("items give <id: word> [count: int 1..64]", "", 36) = 0
+host command_register("items take <id: word> [count: int 1..64]", "", 37) = 0
+host command_register("items count <id: word>", "", 38) = 0
+host command_register("items slot <slot: int 0..40>", "", 39) = 0
+host command_register("items hand", "", 40) = 0
+host command_register("items chest", "", 41) = 0
+host command_register("items ender", "", 42) = 0
+host command_register("items cooldown <id: word> <ticks: int 0..1000>", "", 43) = 0
+host command_register("items registry <kind: word> <key: word>", "", 44) = 0
+host command_register("items level <level: int 1..10>", "", 45) = 0
+host command_register("items recipes", "", 46) = 0
+host command_register("items book", "", 47) = 0
+host command_register("items craft", "", 48) = 0
+host command_register("items menu", "", 49) = 0
+host command_register("items closemenu", "", 50) = 0
+host command_register("items window", "", 51) = 0
+host command_register("items merchant", "", 52) = 0
+host command_register("items loot", "", 53) = 0
+host command_register("entities tour", "", 54) = 0
+host command_register("entities bad", "", 55) = 0
+host event_on("plugin.enable", 2, 56) = 0
+host channel_listen("example:chan", 57) = 0
+host packet_listen("serverbound.chat_message", {"priority": "first"}, 58) = 1
+host packet_listen("clientbound.*", {"observe": true}, 59) = 2
+host packet_listen("serverbound.play.*", {"priority": "late", "observe": true}, 60) = 3
+host packet_listen("serverbound.chat_command", null, 61) = 4
+host packet_listen("nope", null, 62) = -3
+host command_register("pkt <action: word>", "", 63) = 0
+callback token=56 ctx=1
+host config_i64("payout-amount", 5) = 5
+host config_i64("payout-period", 1200) = 1200
+host log(1, "ready: 5 coins every 1200 ticks")
+world event plugin.enable listeners=1 cancelled=0
+# join Steve
+world join Steve handle=1
+callback token=3 ctx=2
+host event_player(2) = 1
+host player_name(1, cap=256) = 5 "Steve"
+host data_get_bool(1, "welcomed", 0) = 0
+host data_set_bool(1, "welcomed", 1) = 0
+host config_i64("welcome-bonus", 50) = 50
+host data_get_i64(1, "coins", 0) = 0
+host data_set_i64(1, "coins", 50) = 0
+host player_send(1, "@welcome", {name="Steve", amount="50"}) = 0
+world send Steve "<gold>Welcome, <yellow>Steve</yellow>! Here is <green>50</green> coins to get started."
+world event player.join listeners=1 cancelled=0
+# join Alex
+world join Alex handle=2
+callback token=3 ctx=3
+host event_player(3) = 2
+host player_name(2, cap=256) = 4 "Alex"
+host data_get_bool(2, "welcomed", 0) = 0
+host data_set_bool(2, "welcomed", 1) = 0
+host config_i64("welcome-bonus", 50) = 50
+host data_get_i64(2, "coins", 0) = 0
+host data_set_i64(2, "coins", 50) = 0
+host player_send(2, "@welcome", {name="Alex", amount="50"}) = 0
+world send Alex "<gold>Welcome, <yellow>Alex</yellow>! Here is <green>50</green> coins to get started."
+world event player.join listeners=1 cancelled=0
+# command Steve hud board
+callback token=28 ctx=4
+host command_source_name(4, cap=256) = 5 "Steve"
+host player_by_name("Steve") = 1
+host hud_scoreboard_main() = 1
+host hud_scoreboard_create() = 2
+host hud_objective_add(2, "kills", {"criterion": "dummy", "title": "<gold>Kills", "hearts": false}) = 0
+host hud_objective_add(2, "broken", {"criterion": "no_such_criterion"}) = -3
+host hud_scoreboard_list(2, "objectives", cap=256) = 9 ["kills"]
+host hud_display_set(2, "sidebar", "kills") = 0
+host hud_display_get(2, "sidebar", cap=256) = 5 "kills"
+host hud_display_set(2, "sidebar", "missing") = -1
+host hud_display_set(2, "nowhere", "kills") = -3
+host hud_score_set(2, "Steve", "kills", 7) = 0
+host hud_score_set(2, "Alex", "kills", 3) = 0
+host hud_score_get(2, "Steve", "kills") = 0 out=7
+host hud_scoreboard_list(2, "entries", cap=256) = 15 ["Alex", "Steve"]
+host hud_score_reset(2, "Steve", "kills") = 0
+host hud_score_get(2, "Steve", "kills") = -1
+host hud_team_add(2, "red") = 0
+host hud_team_add(2, "red") = -3
+host hud_team_set(2, "red", {"display_name": "<red>Red", "prefix": "[R] ", "suffix": "!", "color": "red", "friendly_fire": false, "see_invisible": true, "name_tags": "hideForOtherTeams", "death_messages": "never", "collision": "pushOtherTeams"}) = 0
+host hud_team_set(2, "blue", {"color": "blue"}) = -1
+host hud_team_join(2, "red", "Steve") = 0
+host hud_team_join(2, "gone", "Steve") = -1
+host hud_team_of(2, "Steve", cap=256) = 3 "red"
+host hud_scoreboard_list(2, "teams", cap=256) = 7 ["red"]
+host hud_scoreboard_list(2, "bogus", cap=256) = -3
+host hud_team_leave(2, "red", "Steve") = 0
+host hud_team_leave(2, "red", "Steve") = -1
+host hud_team_of(2, "Steve", cap=256) = -1
+host hud_team_remove(2, "red") = 0
+host hud_team_remove(2, "red") = -1
+host hud_scoreboard_show(1, 2) = 0
+host hud_scoreboard_shown(1) = 2
+host hud_scoreboard_show(1, 1) = 0
+host hud_scoreboard_shown(1) = 1
+host hud_objective_remove(2, "kills") = 0
+host hud_objective_remove(2, "kills") = -1
+host hud_scoreboard_release(2) = 0
+host hud_scoreboard_release(2) = -2
+host hud_scoreboard_release(1) = -3
+host command_reply(4, "board done", {}) = 0
+world reply Steve "board done"
+# command Steve hud bars
+callback token=29 ctx=5
+host command_source_name(5, cap=256) = 5 "Steve"
+host player_by_name("Steve") = 1
+host hud_bossbar_create({"title": "<green>Wave 1", "color": "green", "style": "notched_10", "progress": 0.5, "darken_sky": false, "boss_music": false, "fog": false, "visible": true, "key": "example:wave"}) = 1
+host hud_bossbar_create({"title": "<green>Wave 1", "key": "example:wave"}) = -3
+host hud_bossbar_kept(cap=512) = 16 ["example:wave"]
+host hud_bossbar_get(1, cap=512) = 145 {"id": "example:wave", "key": "example:wave", "title": "<green>Wave 1", "color": "green", "style": "notched_10", "progress": 0.5, "darken_sky": false, "boss_music": false, "fog": false, "visible": true}
+host hud_bossbar_attach("example:wave") = 1
+host hud_bossbar_attach("example:none") = -1
+host hud_bossbar_player_add(1, 1) = 0
+host hud_bossbar_player_add(1, 1) = 0
+host hud_bossbar_players(1, cap=512) = 14 ["uuid-Steve"]
+host hud_bossbar_update(1, {"title": "<red>Wave 2", "color": "red", "progress": 0.25}) = 0
+host hud_bossbar_update(1, {"progress": "half"}) = -3
+host hud_bossbar_player_remove(1, 1) = 0
+host hud_bossbar_player_remove(1, 1) = 0
+host hud_bossbar_remove(1) = 0
+host hud_bossbar_update(1, {"title": "<red>Late"}) = -2
+host hud_bossbar_remove(1) = -2
+host command_reply(5, "bars done", {}) = 0
+world reply Steve "bars done"
+# command Steve hud holograms
+callback token=30 ctx=6
+host command_source_name(6, cap=256) = 5 "Steve"
+host player_by_name("Steve") = 1
+host player_name(1, cap=256) = 5 "Steve"
+host hud_hologram_create("world", "<yellow>Hello", 0.5, 64, 0.5) = 1
+host hud_hologram_create("nowhere", "text", 0, 0, 0) = -1
+host hud_hologram_set(1, {"text": "<yellow>Moved", "x": 2.5, "y": 65, "z": -1.5}) = 0
+host hud_hologram_set(1, {"x": 1}) = -3
+host hud_hologram_set(1, {"audience": ["Steve"]}) = 0
+host hud_hologram_get(1, cap=512) = 104 {"id": 100, "world": "world", "x": 2.5, "y": 65, "z": -1.5, "alive": true, "text": "<yellow>Moved", "audience": ["uuid-Steve"]}
+host hud_hologram_set(1, {"audience": null}) = 0
+host hud_hologram_remove(1) = 0
+host hud_hologram_remove(1) = -2
+host command_reply(6, "holograms done", {}) = 0
+world reply Steve "holograms done"
+# command Steve hud npcs
+callback token=31 ctx=7
+host command_source_name(7, cap=256) = 5 "Steve"
+host player_by_name("Steve") = 1
+host hud_npc_create({"world": "world", "name": "<aqua>Guide", "x": 1.5, "y": 64, "z": 2.5}, 64) = 1
+host hud_npc_create({"world": "nowhere", "name": "Nobody", "x": 0, "y": 0, "z": 0}, 0) = -1
+host hud_npc_set(1, {"name": "<aqua>Guide II", "x": 3.5, "y": 65, "z": 4.5, "yaw": 90, "pitch": -15, "looks_at_players": true, "health": 18, "held_slot": 0, "flags": 0, "pose": 0, "attributes": {"max_health": 30}, "equipment": {"0": {"item": "minecraft:diamond_sword", "count": 1}}}) = 0
+host hud_npc_set(1, {"attributes": {"no_such_attribute": 1}}) = -3
+host hud_npc_get(1, cap=768) = 174 {"id": 101, "uuid": "npc-uuid-101", "name": "<aqua>Guide II", "world": "world", "x": 3.5, "y": 65, "z": 4.5, "alive": true, "audience": null, "health": 18, "max_health": 30, "flags": 0, "pose": 0, "held_slot": 0}
+host hud_npc_item(1, 0, cap=768) = 40 {"item": "minecraft:diamond_sword", "count": 1}
+host hud_npc_item(1, 1, cap=768) = -1
+host hud_npc_attribute(1, "max_health") = 0 out=30
+host hud_npc_attribute(1, "no_such_attribute") = -1
+host hud_npc_animate(1, 0) = 0
+host hud_npc_get(1, cap=768) = 174 {"id": 101, "uuid": "npc-uuid-101", "name": "<aqua>Guide II", "world": "world", "x": 3.5, "y": 65, "z": 4.5, "alive": true, "audience": null, "health": 18, "max_health": 30, "flags": 0, "pose": 0, "held_slot": 0}
+host hud_tab_entry(1, 101, 0) = -3
+host hud_tab_entry(1, 424242, 0) = -3
+host command_reply(7, "npcs done", {}) = 0
+world reply Steve "npcs done"
+# npc-click 1 Alex
+callback token=64 ctx=8
+host log(1, "npc clicked")
+# command Steve hud npc-end
+callback token=32 ctx=9
+host hud_npc_remove(1) = 0
+host hud_npc_animate(1, 0) = -2
+host command_reply(9, "npc end done", {}) = 0
+world reply Steve "npc end done"
+# command Steve hud tab
+callback token=33 ctx=10
+host command_source_name(10, cap=256) = 5 "Steve"
+host player_by_name("Steve") = 1
+host hud_player_set(1, {"tab_header": "<green>Top", "tab_footer": "<gray>Bottom", "list_name": "<gold>Steve", "listed": true, "list_order": 3, "score": 5, "waypoint_style": "default", "waypoint_color": 16711680}) = 0
+host hud_player_get(1, cap=768) = 146 {"tab_header": "<green>Top", "tab_footer": "<gray>Bottom", "list_name": "<gold>Steve", "listed": true, "list_order": 3, "score": 5, "waypoint_style": "default", "waypoint_color": 16711680}
+host hud_player_set(1, {"not_a_property": 1}) = -3
+host hud_player_set(1, {"listed": "yes"}) = -3
+host hud_player_set(1, {"tab_header": null, "tab_footer": null, "list_name": null}) = 0
+host command_reply(10, "tab done", {}) = 0
+world reply Steve "tab done"
+# command Steve hud surfaces
+callback token=34 ctx=11
+host hud_surface_claim("sidebar", 5, {"title": "<gold>Static", "lines": ["<white>one"]}, 65) = 1
+host hud_surface_claim("nowhere", 1, {"title": "<gold>Static", "lines": ["<white>one"]}, 0) = -3
+host hud_surface_update(1, {"title": "<gold>Changed", "lines": ["<white>two"]}) = 0
+host hud_surface_answer(11, {"title": "<gold>Changed", "lines": ["<white>two"]}) = -3
+host command_reply(11, "surfaces done", {}) = 0
+world reply Steve "surfaces done"
+# redraw
+callback token=65 ctx=12
+host hud_surface_answer(12, {"title": "<gold>Example", "lines": ["<white>Hello %player%", "<gray>second line"]}) = 0
+world surface sidebar Steve {"title": "<gold>Example", "lines": ["<white>Hello %player%", "<gray>second line"]}
+callback token=65 ctx=13
+host hud_surface_answer(13, {"title": "<gold>Example", "lines": ["<white>Hello %player%", "<gray>second line"]}) = 0
+world surface sidebar Alex {"title": "<gold>Example", "lines": ["<white>Hello %player%", "<gray>second line"]}
+# command Steve hud surface-end
+callback token=35 ctx=14
+host hud_surface_release(1) = 0
+host hud_surface_release(1) = -2
+host hud_surface_update(1, {"title": "<gold>Late"}) = -2
+host command_reply(14, "surface end done", {}) = 0
+world reply Steve "surface end done"
+# redraw
+# disable
+world event plugin.disable listeners=0 cancelled=0
+world plugin-disabled requested
