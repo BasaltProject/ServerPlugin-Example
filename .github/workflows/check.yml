@@ -2,7 +2,7 @@ name: Check
 
 on:
   push:
-    branches: [cpp]
+    branches: [kotlin]
     paths-ignore: ['**.md']
   pull_request:
     paths-ignore: ['**.md']
