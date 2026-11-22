@@ -2,7 +2,7 @@ name: Check
 
 on:
   push:
-    branches: [cpp]
+    branches: [rust]
     paths-ignore: ['**.md']
   pull_request:
     paths-ignore: ['**.md']

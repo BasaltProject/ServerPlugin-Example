@@ -15,7 +15,7 @@
 
 <p align="center">
   <img alt="Java Edition" src="https://img.shields.io/badge/Java_Edition-26.3-62B47A?logo=minecraft&logoColor=white">
-  <img alt="C++" src="https://img.shields.io/badge/language-C%2B%2B-00599C?logo=cplusplus&logoColor=white">
+  <img alt="Rust" src="https://img.shields.io/badge/language-Rust-DEA584?logo=rust&logoColor=white">
   <img alt="WebAssembly" src="https://img.shields.io/badge/WebAssembly-654FF0?logo=webassembly&logoColor=white">
   <img alt="Plugin ABI" src="https://img.shields.io/badge/plugin_abi-1-000080">
   <img alt="License" src="https://img.shields.io/badge/license-GPL--3.0-green">
@@ -24,7 +24,7 @@
 ## About
 
 A greeter that pays coins for playing, a leaderboard and a shop to spend them in. It shows what a real plugin looks
-like against the plugin ABI, and its code tracks the ABI as it evolves. This branch is written in C++ with the SDK
+like against the plugin ABI, and its code tracks the ABI as it evolves. This branch is written in Rust with the SDK
 that [Kiln](https://github.com/BasaltProject/Kiln) ships.
 
 The plugin is exactly the same in every language, one branch each:
@@ -38,10 +38,10 @@ The by-preference branches are not the choice when maximum performance is the go
 
 | File | API surface |
 |---|---|
-| `src/coins.cpp` | `data_get_i64`, a balance stored per plugin |
-| `src/events.cpp` | `on("player.join", ...)`, `every(...)`, `placeholder(...)` |
-| `src/shop.cpp` | `menu_create` and `menu_set` with click handlers |
-| `src/commands.cpp` | `command(...)` with literal, word and ranged int arguments |
+| `src/coins/mod.rs` | `data_get_i64`, a balance stored per plugin |
+| `src/events/mod.rs` | `on("player.join", ...)`, `every(...)`, `placeholder(...)` |
+| `src/shop/mod.rs` | `menu_create` and `menu_set` with click handlers |
+| `src/commands/mod.rs` | `command(...)` with literal, word and ranged int arguments |
 | `resources/` | `config.toml` and `lang/en_us.toml` messages |
 
 ## Trying it
