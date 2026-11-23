@@ -74,7 +74,7 @@ function tour(ctx: bsCore.Ctx): void {
   bsEntities.entityCall(pig, "add_effect", spec27, buf28);
   const buf29 = new Uint8Array(512);
   bsEntities.entityCall(pig, "effects", new Uint8Array(0), buf29);
-  const spec30 = new bsValues.ValueWriter().beginList().string("example:wander").int(3).string("MOVE").end().finish()!;
+  const spec30 = new bsValues.ValueWriter().beginList().string("example:wander").int(3).string("move").end().finish()!;
   const buf31 = new Uint8Array(64);
   bsEntities.entityCall(pig, "add_goal", spec30, buf31);
   const spec32 = new bsValues.ValueWriter().beginList().string("example:wander").end().finish()!;
