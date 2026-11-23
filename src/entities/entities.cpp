@@ -103,7 +103,7 @@ void tour(basalt::server::core::Ctx ctx) {
     char buf29[512];
     basalt::server::entities::call(pig, "effects", nullptr, 0, buf29, sizeof buf29);
     Spec spec30;
-    spec30.list().string("example:wander").integer(3).string("MOVE").end();
+    spec30.list().string("example:wander").integer(3).string("move").end();
     char buf31[64];
     basalt::server::entities::call(pig, "add_goal", spec30.data(), spec30.finish(), buf31, sizeof buf31);
     Spec spec32;

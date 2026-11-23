@@ -7,6 +7,9 @@ namespace events {
 
 namespace {
 
+constexpr int kOnlineCapacity = 64;
+constexpr int kCrowdCapacity = 4096;
+
 void on_join(basalt::server::core::Ctx ctx) {
     const basalt::server::core::Player player = basalt::server::events::event_player(ctx);
     if (player == 0) {
@@ -26,15 +29,30 @@ void on_join(basalt::server::core::Ctx ctx) {
     }
 }
 
-void payout(basalt::server::core::Ctx) {
-    const long long amount = basalt::server::config::config_i64("payout-amount", 5);
-    basalt::server::core::Player online[64];
-    const int count = basalt::server::players::players_online(online, 64);
-    for (int i = 0; i < count && i < 64; ++i) {
-        const long long balance = coins::add(online[i], amount);
+void pay(const basalt::server::core::Player* players, int count, long long amount) {
+    for (int i = 0; i < count; ++i) {
+        const long long balance = coins::add(players[i], amount);
         basalt::server::core::Args args;
         args.add("amount", Buffer().add(amount).c_str()).add("balance", Buffer().add(balance).c_str());
-        basalt::server::players::action_bar(online[i], "@payout", &args);
+        basalt::server::players::action_bar(players[i], "@payout", &args);
+    }
+}
+
+void payout(basalt::server::core::Ctx) {
+    const long long amount = basalt::server::config::config_i64("payout-amount", 5);
+    basalt::server::core::Player online[kOnlineCapacity];
+    const int count = basalt::server::players::players_online(online, kOnlineCapacity);
+    if (count < 0) {
+        return;
+    }
+    if (count <= kOnlineCapacity) {
+        pay(online, count, amount);
+        return;
+    }
+    static basalt::server::core::Player crowd[kCrowdCapacity];
+    const int total = basalt::server::players::players_online(crowd, kCrowdCapacity);
+    if (total >= 0 && total <= kCrowdCapacity) {
+        pay(crowd, total, amount);
     }
 }
 

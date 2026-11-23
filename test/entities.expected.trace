@@ -133,9 +133,9 @@ host entity_set(2, "nope", true) = -1
 host entity_call(2, "damage", [3], cap=64) = 1 true
 host entity_call(2, "add_effect", ["minecraft:speed", 200, 1], cap=64) = 1 true
 host entity_call(2, "effects", [], cap=512) = 78 [{"effect": "minecraft:speed", "duration": 200, "amplifier": 1, "ambient": false, "particles": true, "icon": true}]
-host entity_call(2, "add_goal", ["example:wander", 3, "MOVE"], cap=64) = 1 true
+host entity_call(2, "add_goal", ["example:wander", 3, "move"], cap=64) = 1 true
 host entity_call(2, "has_goal", ["example:wander"], cap=64) = 1 true
-host entity_call(2, "goals", [], cap=512) = 72 [{"key": "example:wander", "priority": 3, "running": false, "plugin": true, "usable": true, "flags": "MOVE"}]
+host entity_call(2, "goals", [], cap=512) = 72 [{"key": "example:wander", "priority": 3, "running": false, "plugin": true, "usable": true, "flags": "move"}]
 host entity_call(2, "find_path", [5, 64, 5], cap=512) = 9 [5, 64, 5]
 host entity_call(2, "bogus", [], cap=64) = -1
 host entity_snapshot(2, cap=4096) = 17 "nbt:minecraft:pig"
