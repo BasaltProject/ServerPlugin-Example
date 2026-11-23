@@ -20,11 +20,11 @@ fn onJoin(ctx: basalt.core.Ctx) void {
     }
 }
 
-fn payout(_: basalt.core.Ctx) void {
-    const amount = basalt.config.getI64("payout-amount", 5);
-    var online: [64]basalt.core.Player = undefined;
-    const count = basalt.players.online(&online);
-    for (online[0..count]) |player| {
+var crowd: [4096]basalt.core.Player = undefined;
+
+fn pay(players: []const basalt.core.Player, amount: i64) void {
+    for (players) |player| {
+        if (player == 0) continue;
         const balance = coins.add(player, amount);
         var given: [24]u8 = undefined;
         var total: [24]u8 = undefined;
@@ -32,6 +32,15 @@ fn payout(_: basalt.core.Ctx) void {
         _ = args.add("amount", basalt.core.formatI64(amount, &given)).add("balance", basalt.core.formatI64(balance, &total));
         _ = basalt.players.actionBar(player, "@payout", &args);
     }
+}
+
+fn payout(_: basalt.core.Ctx) void {
+    const amount = basalt.config.getI64("payout-amount", 5);
+    var online: [64]basalt.core.Player = @splat(0);
+    const count = basalt.players.online(&online);
+    if (count < online.len) return pay(online[0..count], amount);
+    @memset(&crowd, 0);
+    pay(crowd[0..basalt.players.online(&crowd)], amount);
 }
 
 fn coinsPlaceholder(ctx: basalt.core.Ctx) void {

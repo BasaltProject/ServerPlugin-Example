@@ -143,7 +143,7 @@ fn tour(ctx: basalt.core.Ctx) void {
     w30.beginList();
     w30.string("example:wander");
     w30.int(3);
-    w30.string("MOVE");
+    w30.string("move");
     w30.end();
     const spec30 = w30.finish() catch &[_]u8{};
     var buf31: [64]u8 = undefined;
