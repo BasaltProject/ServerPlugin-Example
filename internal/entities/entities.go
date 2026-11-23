@@ -102,7 +102,7 @@ func EntitiesTour(ctx bsCore.Ctx) {
 	var buf29 [512]byte
 	bsEntities.EntityCall(pig, "effects", nil, buf29[:])
 	w30 := bsValues.NewValueWriter()
-	w30.BeginList().String("example:wander").Int(3).String("MOVE").End()
+	w30.BeginList().String("example:wander").Int(3).String("move").End()
 	spec30, _ := w30.Finish()
 	var buf31 [64]byte
 	bsEntities.EntityCall(pig, "add_goal", spec30, buf31[:])

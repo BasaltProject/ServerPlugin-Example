@@ -14,7 +14,7 @@ import (
 	"unsafe"
 )
 
-const kDocument = 2048
+const documentBytes = 2048
 
 var menuHandle int32
 
@@ -75,7 +75,7 @@ func Hand(ctx bsCore.Ctx) {
 	ItemsSay(ctx, "held", int64(inventory.HeldSlot()))
 	ItemsSay(ctx, "set held", int64(inventory.SetHeldSlot(4)))
 	ItemsSay(ctx, "held", int64(inventory.HeldSlot()))
-	ItemsSay(ctx, "contents bytes", int64(inventory.Contents(make([]byte, kDocument))))
+	ItemsSay(ctx, "contents bytes", int64(inventory.Contents(make([]byte, documentBytes))))
 }
 
 func Chest(ctx bsCore.Ctx) {
@@ -111,7 +111,7 @@ func Cooldown(ctx bsCore.Ctx) {
 func Registry(ctx bsCore.Ctx) {
 	kind, _ := bsCommands.CommandArgStr(ctx, "kind")
 	key, _ := bsCommands.CommandArgStr(ctx, "key")
-	ItemsSay(ctx, "bytes", int64(bsItems.RegistryGet(kind, key, make([]byte, kDocument))))
+	ItemsSay(ctx, "bytes", int64(bsItems.RegistryGet(kind, key, make([]byte, documentBytes))))
 }
 
 func Level(ctx bsCore.Ctx) {
@@ -136,7 +136,7 @@ func Recipes(ctx bsCore.Ctx) {
 		has = 1
 	}
 	ItemsSay(ctx, "has", has)
-	out := make([]byte, kDocument)
+	out := make([]byte, documentBytes)
 	ItemsSay(ctx, "ids bytes", int64(bsItems.RecipeIds(out)))
 	ItemsSay(ctx, "get bytes", int64(bsItems.RecipeGet("example:dirt_gems", out)))
 	ItemsSay(ctx, "removed", int64(bsItems.RecipeRemove("example:dirt_gems")))
@@ -150,7 +150,7 @@ func Book(ctx bsCore.Ctx) {
 	ids, _ := w.Finish()
 	ItemsSay(ctx, "learned", int64(bsItems.RecipeBookSet(player, ids, true)))
 	ItemsSay(ctx, "knows", int64(bsItems.RecipeBookHas(player, "minecraft:stick")))
-	ItemsSay(ctx, "book bytes", int64(bsItems.RecipeBookGet(player, make([]byte, kDocument))))
+	ItemsSay(ctx, "book bytes", int64(bsItems.RecipeBookGet(player, make([]byte, documentBytes))))
 	ItemsSay(ctx, "forgot", int64(bsItems.RecipeBookSet(player, ids, false)))
 	ItemsSay(ctx, "knows", int64(bsItems.RecipeBookHas(player, "minecraft:stick")))
 	ItemsSay(ctx, "resent", int64(bsItems.RecipeBookResend(player)))
@@ -162,7 +162,7 @@ func Craft(ctx bsCore.Ctx) {
 	w.BeginMap().Key("id").String("minecraft:oak_log").Key("count").Int(1).End()
 	w.End().End()
 	input, _ := w.Finish()
-	answer, err := bsValues.CallValue(kDocument, func(out *byte, cap int32) int32 {
+	answer, err := bsValues.CallValue(documentBytes, func(out *byte, cap int32) int32 {
 		return bsItems.RecipeStation("crafting", input, unsafe.Slice(out, cap))
 	})
 	status := int64(0)
@@ -177,7 +177,7 @@ func Craft(ctx bsCore.Ctx) {
 		resultCount = -1
 	}
 	ItemsSay(ctx, "result count", resultCount)
-	ItemsSay(ctx, "unknown", int64(bsItems.RecipeStation("grinder", input, make([]byte, kDocument))))
+	ItemsSay(ctx, "unknown", int64(bsItems.RecipeStation("grinder", input, make([]byte, documentBytes))))
 }
 
 func ClickDiamond(ctx bsCore.Ctx) {
@@ -235,7 +235,7 @@ func Window(ctx bsCore.Ctx) {
 	w.End().End()
 	spec, _ := w.Finish()
 	ItemsSay(ctx, "container", int64(bsItems.WindowOpen(player, spec)))
-	ItemsSay(ctx, "info bytes", int64(bsItems.WindowInfo(player, make([]byte, kDocument))))
+	ItemsSay(ctx, "info bytes", int64(bsItems.WindowInfo(player, make([]byte, documentBytes))))
 	u := bsValues.NewValueWriterLimit(128)
 	u.BeginMap().Key("title").String("<red>Sorted").End()
 	update, _ := u.Finish()
@@ -264,7 +264,7 @@ func Merchant(ctx bsCore.Ctx) {
 }
 
 func Loot(ctx bsCore.Ctx) {
-	out := make([]byte, kDocument)
+	out := make([]byte, documentBytes)
 	ItemsSay(ctx, "tables bytes", int64(bsItems.LootTables(out)))
 	r := bsValues.NewValueWriterLimit(128)
 	r.BeginMap().Key("seed").Int(3).Key("luck").Float(1.5).End()

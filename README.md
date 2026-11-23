@@ -38,21 +38,35 @@ The by-preference branches are not the choice when maximum performance is the go
 
 | File | API surface |
 |---|---|
-| `internal/coins/coins.go` | `data_get_i64`, a balance stored per plugin |
+| `internal/coins/coins.go` | `data_get_i64` and `data_set_i64`, a balance stored per player |
 | `internal/events/events.go` | `on("player.join", ...)`, `every(...)`, `placeholder(...)` |
 | `internal/shop/shop.go` | `menu_create` and `menu_set` with click handlers |
 | `internal/commands/commands.go` | `command(...)` with literal, word and ranged int arguments |
+| `main.go` | Plugin entry, the `plugin.enable` event and `log_info` |
+| `internal/area_events/area_events.go` | `event_on_ex` with filters, `event_get` and `event_set`, player properties, forms, dialogs and plugin events |
+| `internal/server/server.go` | Permissions, broadcasts, `server_call`, files, the key-value store, services, delayed tasks and dynamic commands |
+| `internal/worlds/worlds.go` | Worlds, chunks, blocks, structures and noise |
+| `internal/hud/hud.go` | Scoreboards, boss bars, holograms, NPCs, the tab list and sidebar surfaces |
+| `internal/items/items.go` | Inventories, ender chests, cooldowns, recipes, menus, merchants and loot |
+| `internal/entities/entities.go` | Spawning, motion, properties, goals, pathing, snapshots and spawn rules |
+| `internal/packets/packets.go` | Packet and channel listeners, sending and receiving packets |
 | `resources/` | `config.toml` and `lang/en_us.toml` messages |
+
+The other areas are tours: each one registers commands (`/srv`, `/worlds`, `/hud`, `/items`, `/entities`, `/pkt`)
+that call the imports of one area.
 
 ## Trying it
 
 ```bash
-kiln build && kiln pack
+kiln build && kiln check && kiln pack
 ```
 
 Drop the `.bspkg` from `build/` into the server's `plugins/` folder. Join to get a welcome bonus, use `/coins` and
-`/coins top`, and `/shop` to spend them. `test/run.sh` replays `test/scenario.txt` with `basalt-wasm-trace` and diffs
-the output with `test/expected.trace`, which is identical on every branch.
+`/coins top`, and `/shop` to spend them.
+
+`test/run.sh` replays every `test/*scenario.txt` with `basalt-wasm-trace` (from Wire's tools, on `PATH` or in
+`BASALT_WASM_TRACE`) against `build/plugin.wasm` and diffs each output with its `*expected.trace`, which is identical on
+every branch.
 
 ## License
 
