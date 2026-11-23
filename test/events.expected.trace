@@ -97,7 +97,7 @@ host event_get(3, "world", cap=512) = 7 "world"
 host event_fields(3, cap=512) = 101 {"player_name": "Steve", "player_uuid": "00000000-0000-0000-0000-000000000001", "world": "world", "message": null, "silent": null}
 host event_describe("player.chat", cap=512) = 208 {"name": "player.chat", "cancellable": true, "custom": false, "fields": [{"name": "player_name", "mutable": false}, {"name": "player_uuid", "mutable": false}, {"name": "world", "mutable": false}, {"name": "message", "mutable": true}, {"name": "format", "mutable": true}, {"name": "recipients", "mutable": true}]}
 host event_describe("no.such.event", cap=512) = -1
-host event_names(cap=8192) = 4174 228 names
+host event_names(cap=8192) = 4275 232 names
 host player_uuid(1, cap=64) = 36 "00000000-0000-0000-0000-000000000001"
 host player_by_uuid("00000000-0000-0000-0000-000000000001") = 1
 host player_by_uuid("00000000-0000-0000-0000-999999999999") = 0

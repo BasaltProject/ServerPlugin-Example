@@ -1,19 +1,21 @@
 package org.basaltmc.server.example;
 
-import org.basaltmc.server.example.packets.PacketsExample;
-import org.basaltmc.server.example.entities.EntitiesExample;
-import org.basaltmc.server.example.items.ItemCommands;
-import org.basaltmc.server.example.hud.HudExample;
-import org.basaltmc.server.example.worlds.Worlds;
-import org.basaltmc.server.example.server.ServerTour;
-import org.basaltmc.server.example.events.AreaEvents;
-import org.basaltmc.server.example.events.Events;
-import org.basaltmc.server.example.commands.Commands;
-import org.basaltmc.server.example.shop.Shop;
-import static org.basaltmc.server.config.Config.configI64;
+import org.basaltmc.server.example.commands.CoinCommands;
+import org.basaltmc.server.example.entities.MobExamples;
+import org.basaltmc.server.example.events.EventExamples;
+import org.basaltmc.server.example.events.PlayerListeners;
+import org.basaltmc.server.example.hud.DisplayExamples;
+import org.basaltmc.server.example.items.InventoryCommands;
+import org.basaltmc.server.example.packets.ChannelExamples;
+import org.basaltmc.server.example.services.ServiceExamples;
+import org.basaltmc.server.example.shop.Storefront;
+import org.basaltmc.server.example.worlds.WorldTour;
+
+import static org.basaltmc.server.config.Settings.configI64;
 import static org.basaltmc.server.core.Priority.NORMAL;
-import static org.basaltmc.server.events.Events.on;
-import static org.basaltmc.server.log.Log.logInfo;
+import static org.basaltmc.server.events.EventBus.on;
+import static org.basaltmc.server.log.Logger.logInfo;
+
 public final class Main {
     private Main() {}
 
@@ -23,16 +25,16 @@ public final class Main {
     }
 
     public static void init() {
-        Shop.build();
-        Events.register();
-        Commands.register();
-        AreaEvents.register();
-        ServerTour.register();
-        Worlds.register();
-        HudExample.register();
-        ItemCommands.register();
-        EntitiesExample.register();
+        Storefront.build();
+        PlayerListeners.register();
+        CoinCommands.register();
+        EventExamples.register();
+        ServiceExamples.register();
+        WorldTour.register();
+        DisplayExamples.register();
+        InventoryCommands.register();
+        MobExamples.register();
         on("plugin.enable", NORMAL, Main::ready);
-        PacketsExample.register();
+        ChannelExamples.register();
     }
 }

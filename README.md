@@ -38,21 +38,35 @@ The by-preference branches are not the choice when maximum performance is the go
 
 | File | API surface |
 |---|---|
-| `src/org/basaltmc/server/example/coins/Coins.java` | `data_get_i64`, a balance stored per plugin |
-| `src/org/basaltmc/server/example/events/Events.java` | `on("player.join", ...)`, `every(...)`, `placeholder(...)` |
-| `src/org/basaltmc/server/example/shop/Shop.java` | `menu_create` and `menu_set` with click handlers |
-| `src/org/basaltmc/server/example/commands/Commands.java` | `command(...)` with literal, word and ranged int arguments |
+| `src/org/basaltmc/server/example/coins/Wallet.java` | `data_get_i64` and `data_set_i64`, a balance stored per player |
+| `src/org/basaltmc/server/example/events/PlayerListeners.java` | `on("player.join", ...)`, `every(...)`, `placeholder(...)` |
+| `src/org/basaltmc/server/example/shop/Storefront.java` | `menu_create` and `menu_set` with click handlers |
+| `src/org/basaltmc/server/example/commands/CoinCommands.java` | `command(...)` with literal, word and ranged int arguments |
+| `src/org/basaltmc/server/example/Main.java` | Plugin entry, the `plugin.enable` event and `log_info` |
+| `src/org/basaltmc/server/example/events/EventExamples.java` | `event_on_ex` with filters, `event_get` and `event_set`, player properties, forms, dialogs and plugin events |
+| `src/org/basaltmc/server/example/services/ServiceExamples.java` | Permissions, broadcasts, `server_call`, files, the key-value store, services, delayed tasks and dynamic commands |
+| `src/org/basaltmc/server/example/worlds/WorldTour.java` | Worlds, chunks, blocks, structures and noise |
+| `src/org/basaltmc/server/example/hud/DisplayExamples.java` | Scoreboards, boss bars, holograms, NPCs, the tab list and sidebar surfaces |
+| `src/org/basaltmc/server/example/items/InventoryCommands.java` | Inventories, ender chests, cooldowns, recipes, menus, merchants and loot |
+| `src/org/basaltmc/server/example/entities/MobExamples.java` | Spawning, motion, properties, goals, pathing, snapshots and spawn rules |
+| `src/org/basaltmc/server/example/packets/ChannelExamples.java` | Packet and channel listeners, sending and receiving packets |
 | `resources/` | `config.toml` and `lang/en_us.toml` messages |
+
+The other areas are tours: each one registers commands (`/srv`, `/worlds`, `/hud`, `/items`, `/entities`, `/pkt`)
+that call the imports of one area.
 
 ## Trying it
 
 ```bash
-kiln build && kiln pack
+kiln build && kiln check && kiln pack
 ```
 
 Drop the `.bspkg` from `build/` into the server's `plugins/` folder. Join to get a welcome bonus, use `/coins` and
-`/coins top`, and `/shop` to spend them. `test/run.sh` replays `test/scenario.txt` with `basalt-wasm-trace` and diffs
-the output with `test/expected.trace`, which is identical on every branch.
+`/coins top`, and `/shop` to spend them.
+
+`test/run.sh` replays every `test/*scenario.txt` with `basalt-wasm-trace` (from Wire's tools, on `PATH` or in
+`BASALT_WASM_TRACE`) against `build/plugin.wasm` and diffs each output with its `*expected.trace`, which is identical on
+every branch.
 
 ## License
 

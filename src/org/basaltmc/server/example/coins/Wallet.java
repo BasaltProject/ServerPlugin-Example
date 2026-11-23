@@ -1,9 +1,10 @@
 package org.basaltmc.server.example.coins;
 
-import static org.basaltmc.server.data.SharedData.dataGetI64;
-import static org.basaltmc.server.data.SharedData.dataSetI64;
-public final class Coins {
-    private Coins() {}
+import static org.basaltmc.server.data.PlayerStore.dataGetI64;
+import static org.basaltmc.server.data.PlayerStore.dataSetI64;
+
+public final class Wallet {
+    private Wallet() {}
 
     public static long get(int player) {
         return dataGetI64(player, "coins", 0);
