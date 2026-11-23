@@ -15,7 +15,6 @@ fn done(ctx: Ctx) {
 }
 
 fn later2(_: Ctx) {
-    let mut w2: i32 = 0;
     {
         let mut d20000 = Writer::new();
         d20000.begin_map().key("name").string("tour").end();
@@ -30,11 +29,10 @@ fn later2(_: Ctx) {
     {
         worlds::world_delete("tour");
     }
-    let _ = w2;
 }
 
 fn later(_: Ctx) {
-    let mut w2: i32 = 0;
+    let w2: i32;
     {
         let mut d10000 = Writer::new();
         d10000.begin_map().key("name").string("tour").end();
@@ -43,7 +41,6 @@ fn later(_: Ctx) {
     {
         worlds::world_at(w2, 0.5, 0.5, later2);
     }
-    let _ = w2;
 }
 
 fn tour(_: Ctx) {
@@ -51,13 +48,12 @@ fn tour(_: Ctx) {
     worlds::block_distance(0, 0, 0, 3, 4, 0);
     let mut pos = [1, 2, 3];
     worlds::pos_offset(&mut pos, 1, 1, 1);
-    let mut w: i32 = 0;
+    let w: i32;
     let p: i32 = basalt_server::players::by_name("Steve");
-    let mut w2: i32 = 0;
-    let mut rq: i32 = 0;
-    let mut nz: i32 = 0;
+    let rq: i32;
+    let nz: i32;
     let mut s1 = [0u8; 2048];
-    let mut s1n: i32 = 0;
+    let s1n: i32;
     {
         w = worlds::world_by_name("world");
     }
@@ -527,7 +523,6 @@ fn tour(_: Ctx) {
     {
         worlds::world_at(w, 3.5, 3.5, later);
     }
-    let _ = (w, p, w2, rq, nz);
 }
 
 pub fn register() {

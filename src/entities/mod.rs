@@ -96,7 +96,7 @@ fn tour(ctx: Ctx) {
     let mut buf29 = [0u8; 512];
     entities::call(pig, "effects", &[], &mut buf29);
     let mut w30 = Writer::new();
-    w30.begin_list().string("example:wander").int(3).string("MOVE").end();
+    w30.begin_list().string("example:wander").int(3).string("move").end();
     let spec30 = w30.into_vec().unwrap_or_default();
     let mut buf31 = [0u8; 64];
     entities::call(pig, "add_goal", &spec30, &mut buf31);
