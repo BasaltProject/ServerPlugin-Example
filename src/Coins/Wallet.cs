@@ -1,18 +1,18 @@
 using Basalt.Server.Core;
+using Basalt.Server.Data;
 using Basalt.Server.Items;
 using Basalt.Server.Values;
-using SdkData = global::Basalt.Server.Data.Data;
 
 namespace Basalt.Server.Example.Coins;
 
-public static class Coins
+public static class Wallet
 {
-    public static long Get(int player) => SdkData.DataGetI64(player, "coins", 0);
+    public static long Get(int player) => PlayerStore.DataGetI64(player, "coins", 0);
 
     public static long Add(int player, long amount)
     {
         long balance = Get(player) + amount;
-        SdkData.DataSetI64(player, "coins", balance);
+        PlayerStore.DataSetI64(player, "coins", balance);
         return balance;
     }
 
@@ -23,7 +23,7 @@ public static class Coins
         {
             return false;
         }
-        SdkData.DataSetI64(player, "coins", balance - amount);
+        PlayerStore.DataSetI64(player, "coins", balance - amount);
         return true;
     }
 }

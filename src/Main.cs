@@ -1,19 +1,18 @@
-using ExamplePacketsExample = global::Basalt.Server.Example.Packets.PacketsExample;
-using ExampleEntitiesExample = global::Basalt.Server.Example.Entities.EntitiesExample;
-using ExampleItemsCommands = global::Basalt.Server.Example.Items.ItemsCommands;
-using ExampleHudExample = global::Basalt.Server.Example.Hud.HudExample;
-using ExampleWorldsTour = global::Basalt.Server.Example.Worlds.WorldsTour;
-using ExampleServerExample = global::Basalt.Server.Example.Server.ServerExample;
-using ExampleAreaEvents = global::Basalt.Server.Example.Events.AreaEvents;
-using ExampleEvents = global::Basalt.Server.Example.Events.Events;
-using ExampleCommands = global::Basalt.Server.Example.Commands.Commands;
-using ExampleShop = global::Basalt.Server.Example.Shop.Shop;
+using Basalt.Server.Config;
 using Basalt.Server.Core;
+using Basalt.Server.Events;
+using Basalt.Server.Example.Commands;
+using Basalt.Server.Example.Entities;
+using Basalt.Server.Example.Events;
+using Basalt.Server.Example.Hud;
+using Basalt.Server.Example.Items;
+using Basalt.Server.Example.Packets;
+using Basalt.Server.Example.Services;
+using Basalt.Server.Example.Shop;
+using Basalt.Server.Example.Worlds;
 using Basalt.Server.Items;
+using Basalt.Server.Log;
 using Basalt.Server.Values;
-using SdkConfig = global::Basalt.Server.Config.Config;
-using SdkEvents = global::Basalt.Server.Events.Events;
-using SdkLogger = global::Basalt.Server.Log.Logger;
 
 namespace Basalt.Server.Example;
 
@@ -21,23 +20,23 @@ public static class Plugin
 {
     static void Ready(int ctx)
     {
-        long amount = SdkConfig.ConfigI64("payout-amount", 5);
-        long period = SdkConfig.ConfigI64("payout-period", 1200);
-        SdkLogger.LogInfo("ready: " + amount.ToString() + " coins every " + period.ToString() + " ticks");
+        long amount = Settings.ConfigI64("payout-amount", 5);
+        long period = Settings.ConfigI64("payout-period", 1200);
+        Logger.LogInfo("ready: " + amount.ToString() + " coins every " + period.ToString() + " ticks");
     }
 
     public static void Init()
     {
-        ExampleShop.Build();
-        ExampleEvents.RegisterAll();
-        ExampleCommands.RegisterAll();
-        ExampleAreaEvents.Register();
-        ExampleServerExample.RegisterAll();
-        ExampleWorldsTour.Register();
-        ExampleHudExample.RegisterAll();
-        ExampleItemsCommands.RegisterAll();
-        ExampleEntitiesExample.RegisterAll();
-        SdkEvents.On("plugin.enable", Priority.Normal, Ready);
-        ExamplePacketsExample.Register();
+        Storefront.Build();
+        PlayerListeners.RegisterAll();
+        CoinCommands.RegisterAll();
+        EventExamples.Register();
+        ServiceExamples.RegisterAll();
+        WorldTour.Register();
+        DisplayExamples.RegisterAll();
+        InventoryCommands.RegisterAll();
+        MobExamples.RegisterAll();
+        EventBus.On("plugin.enable", Priority.Normal, Ready);
+        ChannelExamples.Register();
     }
 }
